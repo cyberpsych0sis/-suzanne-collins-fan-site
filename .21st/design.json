@@ -1,0 +1,35 @@
+{
+  "name": "rebrand-01",
+  "version": 1,
+  "source": "AGENTS.md",
+  "light": {
+    "background": "#fcfaf2",
+    "surface": "#f4ede0",
+    "card": "#ffffff",
+    "border": "#e2d8c3",
+    "textPrimary": "#0f172a",
+    "textSecondary": "#57534e",
+    "accentPrimary": "#064e3b",
+    "accentPrimaryHover": "#022c22",
+    "accentGold": "#b45309",
+    "accentRed": "#991b1b"
+  },
+  "dark": {
+    "background": "#12100e",
+    "surface": "#191613",
+    "card": "#211d19",
+    "border": "#3b342c",
+    "textPrimary": "#f1e7d4",
+    "textSecondary": "#b0a48f",
+    "accentGold": "#e7b04a",
+    "accentRed": "#b02a2a"
+  },
+  "rules": {
+    "primaryButtonRadius": "rounded-full",
+    "minContrastNormal": "4.5:1",
+    "minContrastLarge": "3:1",
+    "focusVisible": "ring-2 with offset",
+    "motion": "no transition-all, no hover:scale on controls, prefers-reduced-motion disables page animation"
+  },
+  "notes": "New Release spotlight and Updates/newsletter CTA were removed per user request (2026-11-05). Sunrise banner remains only in viewing-guide.html#sunrise."
+}

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="No time to read? Watch Suzanne Collins' Panem story on screen instead — the five Hunger Games films, in release order or in-world chronology, spoiler-light.">
+    <title>Viewing Guide | Suzanne Collins Official Author Website</title>
+    <!-- Apply the saved theme before first paint so dark mode never flashes light -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('sc-theme');
+                var dark = saved ? saved === 'dark'
+                                 : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark', dark);
+                document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+            } catch (e) { /* ignore private-mode storage errors */ }
+        })();
+    </script>
+    <meta name="view-transition" content="same-origin">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        academia: {
+                            parchment: '#fcfaf2',
+                            cream:     '#f4ede0',
+                            card:      '#ffffff',
+                            border:    '#e2d8c3',
+                            burgundy:  '#7c2d12',
+                            gold:      '#b45309',
+                            ink:       '#292524',
+                            muted:     '#57534e'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Georgia', 'Cambria', 'Baskerville', 'Times New Roman', 'serif'],
+                        sans:  ['system-ui', '-apple-system', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Smooth slide transitions between pages -->
+    <style>
+        @keyframes pageSlideInFromLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        body { animation: pageSlideInFromLeft 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+        .page-slide-out-right { opacity: 0; transform: translateX(40px); transition: opacity 0.3s ease, transform 0.3s ease; }
+            @media (prefers-reduced-motion: reduce) { body { animation: none; } .page-slide-out-right { transition: none; } }
+    </style>
+</head>
+<body class="bg-[#fcfaf2] dark:bg-[#12100e] text-[#292524] dark:text-[#f1e7d4] font-sans antialiased selection:bg-[#7c2d12] selection:text-[#fcfaf2] transition-colors duration-300 dark:selection:bg-[#b02a2a] dark:selection:text-[#f6efdf]">
+
+    <!-- ── FIXED HEADER ─────────────────────────────────────────────────── -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-[#fcfaf2]/90 dark:bg-[#12100e]/90 backdrop-blur-md border-b border-[#e2d8c3] dark:border-[#3b342c] transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <a href="index.html" class="group flex items-center gap-2 py-2">
+                    <span class="font-serif tracking-widest text-2xl font-bold uppercase text-[#0f172a] dark:text-[#f1e7d4] group-hover:text-[#064e3b] dark:group-hover:text-[#f4ca72] transition-colors">SC</span>
+                    <span class="hidden sm:inline text-xs font-serif italic text-[#57534e] dark:text-[#b0a48f]">&bull; Panem on Screen</span>
+                </a>
+                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+                    <a href="index.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Home</a>
+                    <a href="map.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Map of Panem</a>
+                    <a href="collections.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Collections</a>
+                    <a href="biography.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Biography</a>
+                    <a href="viewing-guide.html" aria-current="page" class="text-[#064e3b] dark:text-[#e7b04a] transition-colors">Viewing Guide</a>
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors shadow-xs" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                </nav>
+
+                <!-- Mobile controls -->
+                <div class="flex items-center gap-2 md:hidden">
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="p-2 text-[#0f172a] hover:text-[#064e3b] dark:text-[#f1e7d4] dark:hover:text-[#f4ca72] transition-colors" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-menu">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-3 pb-5 space-y-1 bg-[#fcfaf2]/95 backdrop-blur-md border-b border-[#e2d8c3] shadow-md dark:bg-[#12100e]/95 dark:border-[#3b342c]">
+            <a href="index.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Home</a>
+            <a href="map.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Map of Panem</a>
+            <a href="collections.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Collections</a>
+            <a href="biography.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Biography</a>
+            <a href="viewing-guide.html" class="block rounded-lg px-3 py-2 bg-[#064e3b]/10 text-[#064e3b] font-semibold dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">Viewing Guide</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- ══ HERO ═════════════════════════════════════════════════════════ -->
+        <section id="top" class="relative overflow-hidden pt-32 pb-24 lg:pt-40 lg:pb-32 border-b border-[#e2d8c3] dark:border-[#3b342c] bg-[#141210]">
+            <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(231,176,74,0.14),transparent_55%)]"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_115%,rgba(176,42,42,0.16),transparent_60%)]"></div>
+                <img src="assets/image/mockingjay-pin.gif" alt="" class="absolute left-[67%] top-[74%] w-[86%] max-w-xl -translate-x-1/2 -translate-y-1/2 object-contain mix-blend-screen opacity-80" aria-hidden="true">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70"></div>
+            </div>
+
+            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-[#f1e7d4] leading-tight mb-6">
+                    Viewing Guide<br>
+                    <span class="italic text-[#e7b04a]">Panem on Screen</span>
+                </h1>
+
+                <p class="max-w-2xl mx-auto text-base sm:text-lg text-[#d5c9b4] leading-relaxed mb-10">
+                    No time for the books? You can still live the whole saga &mdash; collins&rsquo;s Panem story works beautifully as a five-film marathon. Here&rsquo;s exactly what to watch, in what order, and how long each movie takes.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#start-here" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#064e3b] hover:bg-[#022c22] text-[#fcfaf2] font-semibold text-base transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 group dark:bg-[#b02a2a] dark:hover:bg-[#8c1f22] dark:text-[#f6efdf]">
+                        <span>Start Here</span>
+                        <i class="fa-solid fa-arrow-down text-xs text-[#d97706] group-hover:translate-y-0.5 transition-transform dark:text-[#e7b04a]"></i>
+                    </a>
+                    <a href="#films" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white/95 hover:bg-white border border-[#064e3b]/30 text-[#0f172a] hover:text-[#064e3b] font-semibold text-base transition-colors shadow-sm flex items-center justify-center gap-2 dark:bg-[#211d19]/95 dark:hover:bg-[#2c2721] dark:border-[#b02a2a]/40 dark:text-[#f1e7d4] dark:hover:text-[#f4ca72]">
+                        <i class="fa-solid fa-film text-[#d97706] dark:text-[#e7b04a]"></i>
+                        <span>Browse the Films</span>
+                    </a>
+                </div>
+
+                <div class="mx-auto mt-12 grid max-w-2xl grid-cols-3 divide-x divide-[#e2d8c3] overflow-hidden rounded-2xl border border-[#e2d8c3] bg-white/85 shadow-sm backdrop-blur-sm dark:divide-[#3b342c] dark:border-[#3b342c] dark:bg-[#211d19]/85">
+                    <div class="px-3 py-5">
+                        <p class="font-serif text-2xl sm:text-3xl font-bold text-[#064e3b] dark:text-[#e7b04a]">5</p>
+                        <p class="mt-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">Films to watch</p>
+                    </div>
+                    <div class="px-3 py-5">
+                        <p class="font-serif text-2xl sm:text-3xl font-bold text-[#064e3b] dark:text-[#e7b04a]">~11&frac12;h</p>
+                        <p class="mt-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">Total runtime</p>
+                    </div>
+                    <div class="px-3 py-5">
+                        <p class="font-serif text-2xl sm:text-3xl font-bold text-[#064e3b] dark:text-[#e7b04a]">0</p>
+                        <p class="mt-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">Books required</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ START HERE ══════════════════════════════════════════════════ -->
+        <section id="start-here" class="scroll-mt-24 py-20 bg-[#f4ede0] dark:bg-[#191613]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs uppercase tracking-widest text-[#b45309] font-bold mb-2 dark:text-[#e7b04a]">First time? Start here</h2>
+                    <h3 class="text-3xl sm:text-4xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">The 60-Second Watch Order</h3>
+                    <p class="mt-3 text-[#57534e] text-base dark:text-[#b0a48f]">Watch in release order. The prequel assumes you already know who Snow becomes &mdash; so save it for last, then rewind to the beginning of Panem&rsquo;s story if you want it chronologically.</p>
+                </div>
+
+                <ol class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                    <li class="flex flex-col rounded-2xl border border-[#e2d8c3] bg-white p-5 shadow-sm dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <span class="font-serif text-3xl font-bold text-[#064e3b]/20 dark:text-[#e7b04a]/25">01</span>
+                        <p class="mt-2 font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">The Hunger Games</p>
+                        <p class="mt-1 text-xs text-[#57534e] dark:text-[#b0a48f]">2012 &middot; 2h 22m &middot; the 74th Games</p>
+                        <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">The perfect entry point &mdash; everything is explained as it happens.</p>
+                    </li>
+                    <li class="flex flex-col rounded-2xl border border-[#e2d8c3] bg-white p-5 shadow-sm dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <span class="font-serif text-3xl font-bold text-[#064e3b]/20 dark:text-[#e7b04a]/25">02</span>
+                        <p class="mt-2 font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">Catching Fire</p>
+                        <p class="mt-1 text-xs text-[#57534e] dark:text-[#b0a48f]">2013 &middot; 2h 11m &middot; the 75th Games</p>
+                        <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">Picks up one year later &mdash; the arena gets deadlier, the stakes get political.</p>
+                    </li>
+                    <li class="flex flex-col rounded-2xl border border-[#e2d8c3] bg-white p-5 shadow-sm dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <span class="font-serif text-3xl font-bold text-[#064e3b]/20 dark:text-[#e7b04a]/25">03</span>
+                        <p class="mt-2 font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">Mockingjay &ndash; Part 1</p>
+                        <p class="mt-1 text-xs text-[#57534e] dark:text-[#b0a48f]">2014 &middot; 2h 3m &middot; war begins</p>
+                        <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">No arena this time &mdash; it&rsquo;s the rebellion&rsquo;s slow, tense build-up.</p>
+                    </li>
+                    <li class="flex flex-col rounded-2xl border border-[#e2d8c3] bg-white p-5 shadow-sm dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <span class="font-serif text-3xl font-bold text-[#064e3b]/20 dark:text-[#e7b04a]/25">04</span>
+                        <p class="mt-2 font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">Mockingjay &ndash; Part 2</p>
+                        <p class="mt-1 text-xs text-[#57534e] dark:text-[#b0a48f]">2015 &middot; 2h 17m &middot; the finale</p>
+                        <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">The climax of Katniss&rsquo;s story &mdash; watch this before the prequel for full impact.</p>
+                    </li>
+                    <li class="flex flex-col rounded-2xl border border-[#064e3b]/30 bg-[#064e3b]/5 p-5 shadow-sm dark:border-[#e7b04a]/40 dark:bg-[#e7b04a]/5">
+                        <span class="font-serif text-3xl font-bold text-[#064e3b]/20 dark:text-[#e7b04a]/25">05</span>
+                        <p class="mt-2 font-serif font-bold text-[#064e3b] dark:text-[#e7b04a]">Ballad of Songbirds &amp; Snakes</p>
+                        <p class="mt-1 text-xs text-[#57534e] dark:text-[#b0a48f]">2023 &middot; 2h 37m &middot; the 10th Games</p>
+                        <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">A prequel about young Snow &mdash; hits hardest once you know the president he becomes.</p>
+                    </li>
+                </ol>
+
+                <div class="mt-8 flex items-start gap-4 rounded-2xl border border-[#b45309]/30 bg-[#b45309]/5 p-6 dark:border-[#e7b04a]/30 dark:bg-[#e7b04a]/5">
+                    <i class="fa-solid fa-lightbulb mt-1 text-lg text-[#b45309] dark:text-[#e7b04a]"></i>
+                    <p class="text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                        <strong class="font-semibold text-[#0f172a] dark:text-[#f1e7d4]">Marathon tip:</strong> the four Katniss films run about 9 hours total. Splitting them over two evenings &mdash; two films, a break, then the finale plus the prequel &mdash; keeps the arc easy to follow without any reading at all.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ SUNRISE ON THE REAPING · FEATURED UPCOMING FILM ═════════════ -->
+        <section id="sunrise" class="scroll-mt-24 py-20 bg-[#fcfaf2] dark:bg-[#12100e]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="overflow-hidden rounded-3xl border border-[#991b1b]/25 bg-white shadow-xl dark:border-[#b02a2a]/40 dark:bg-[#211d19] dark:shadow-[0_0_55px_-15px_rgba(176,42,42,0.6)]">
+                    <!-- Official banner (click to play the trailer) -->
+                    <button type="button" class="trailer-btn group/banner relative block w-full overflow-hidden" data-video="fS35YSjopjE" data-title="Sunrise on the Reaping — Official Trailer" aria-label="Play the official trailer for Sunrise on the Reaping">
+                        <img src="assets/image/posters/sunrise-banner.jpg" alt="Official banner for The Hunger Games: Sunrise on the Reaping — tributes and Capitol figures under a stormy sky" class="aspect-[16/9] w-full object-cover sm:aspect-[21/9]" loading="lazy">
+                        <span class="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover/banner:bg-black/30">
+                            <span class="flex h-16 w-16 items-center justify-center rounded-full bg-[#991b1b]/90 text-[#fcfaf2] opacity-0 shadow-2xl transition-opacity duration-300 group-hover/banner:opacity-100 dark:bg-[#b02a2a]/90"><i class="fa-solid fa-play ml-1 text-xl"></i></span>
+                        </span>
+                    </button>
+                    <div class="p-8 sm:p-12">
+                        <!-- Details column -->
+                            <div class="flex flex-wrap items-center gap-3">
+                                <span class="inline-flex items-center gap-2 rounded-full bg-[#991b1b] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#fcfaf2] dark:bg-[#b02a2a] dark:text-[#f6efdf]">
+                                    <i class="fa-solid fa-clapperboard text-[9px]"></i> Upcoming Film
+                                </span>
+                                <span class="text-xs font-semibold text-[#57534e] dark:text-[#b0a48f]">
+                                    <i class="fa-regular fa-calendar-check mr-1 text-[#991b1b] dark:text-[#f08a8a]"></i> In theaters November 20, 2026
+                                </span>
+                                <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">The 50th Hunger Games</span>
+                            </div>
+                            <h2 class="mt-4 text-3xl sm:text-4xl font-serif font-bold text-[#0f172a] leading-tight dark:text-[#f1e7d4]">Sunrise on the Reaping</h2>
+                            <p class="mt-3 text-sm sm:text-base leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                The next chapter of Panem is heading to the big screen. Twenty-four years before Katniss Everdeen volunteers, the Second Quarter Quell doubles the tributes &mdash; and a young Haymitch Abernathy is sent into an arena built to remind the districts of their powerlessness. It&rsquo;s the story of how Panem&rsquo;s most unlikely mentor was made.
+                            </p>
+                            <div class="mt-5 flex flex-wrap gap-1.5">
+                                <span class="rounded-full bg-[#991b1b]/10 px-2.5 py-1 text-[10px] font-semibold text-[#991b1b] dark:bg-[#b02a2a]/15 dark:text-[#f08a8a]">Second Quarter Quell</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Young Haymitch</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Prequel</span>
+                            </div>
+                            <div class="mt-6 flex flex-wrap items-center gap-4 border-t border-[#e2d8c3] pt-5 dark:border-[#3b342c]">
+                                <button type="button" class="trailer-btn inline-flex items-center gap-2 rounded-full bg-[#991b1b] px-5 py-2.5 text-xs font-semibold text-[#fcfaf2] shadow-sm transition-colors hover:bg-[#7f1d1d] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]" data-video="fS35YSjopjE" data-title="Sunrise on the Reaping — Official Trailer">
+                                    <i class="fa-solid fa-play text-[10px]"></i> Watch the Official Trailer
+                                </button>
+                                <span class="text-xs text-[#57534e] dark:text-[#b0a48f]">Where it fits: after <em>Ballad</em> in chronology &mdash; we&rsquo;ll add it to the list below when it lands.</span>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ FILM LIST ════════════════════════════════════════════════════ -->
+        <section id="films" class="scroll-mt-24 py-20 bg-[#f4ede0] dark:bg-[#191613]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+                    <div class="max-w-2xl">
+                        <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#064e3b] dark:text-[#e7b04a]">
+                            <span class="h-px w-6 bg-current"></span> The Films
+                        </div>
+                        <h2 class="mt-3 text-3xl sm:text-5xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">Every Film, Spoiler-Light</h2>
+                        <p class="mt-4 text-sm sm:text-base leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                            What each movie covers, how long it takes, and where it sits in Panem&rsquo;s timeline. Flip between <strong class="font-semibold text-[#064e3b] dark:text-[#e7b04a]">release order</strong> (how audiences met them) and <strong class="font-semibold text-[#064e3b] dark:text-[#e7b04a]">in-world chronology</strong> (how the story actually happens).
+                        </p>
+                    </div>
+
+                    <div class="shrink-0">
+                        <p class="mb-2 text-[11px] font-bold uppercase tracking-widest text-[#57534e] dark:text-[#b0a48f]">Arrange by</p>
+                        <div class="inline-flex flex-col gap-1 rounded-2xl border border-[#e2d8c3] bg-white p-1 shadow-sm dark:border-[#3b342c] dark:bg-[#211d19] sm:flex-row sm:rounded-full" role="group" aria-label="Arrange the films by">
+                            <button type="button" class="order-btn inline-flex items-center justify-center gap-2 rounded-full bg-[#064e3b] px-4 py-2 text-xs font-semibold text-[#fcfaf2] shadow-sm transition-colors dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:text-sm" data-order="release" aria-pressed="true" aria-controls="film-list">
+                                <i class="fa-regular fa-calendar text-[11px]"></i> Release Order
+                            </button>
+                            <button type="button" class="order-btn inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-semibold text-[#57534e] transition-colors hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] sm:text-sm" data-order="chronology" aria-pressed="false" aria-controls="film-list">
+                                <i class="fa-solid fa-timeline text-[11px]"></i> In-World Chronology
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="order-note" class="mt-6 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]" aria-live="polite">
+                    <strong class="font-semibold text-[#064e3b] dark:text-[#e7b04a]">Release order:</strong> the order audiences first watched them &mdash; recommended for a first marathon.
+                </p>
+
+                <div id="film-list" class="relative mt-14">
+                    <div class="pointer-events-none absolute left-5 top-2 bottom-2 w-px bg-gradient-to-b from-[#064e3b] via-[#b45309] to-[#991b1b] dark:from-[#b02a2a] dark:via-[#e7b04a] dark:to-[#3b342c] sm:left-6"></div>
+
+                    <!-- 01 · The Hunger Games (2012) -->
+                    <article class="film-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-release="1" data-chronology="2">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">01</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <button type="button" class="trailer-btn group/poster relative block w-full overflow-hidden rounded-xl shadow-lg transition-transform duration-300" data-video="mfmrPu43DF8" data-title="The Hunger Games — Official Trailer" aria-label="Play the official trailer for The Hunger Games">
+                                        <img src="assets/image/posters/hunger-games-2012.jpg" alt="The Hunger Games (2012) theatrical poster" class="aspect-[2/3] w-full object-cover" loading="lazy">
+                                        <span class="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover/poster:bg-black/35">
+                                            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-[#991b1b]/90 text-[#fcfaf2] opacity-0 shadow-lg transition-opacity duration-300 group-hover/poster:opacity-100 dark:bg-[#b02a2a]/90"><i class="fa-solid fa-play ml-0.5"></i></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#064e3b]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#064e3b] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">
+                                            <i class="fa-solid fa-hourglass-half"></i> The 74th Hunger Games
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Film 2012</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> 2h 22m</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">The Hunger Games</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        In the ruins of a future North America, the Capitol forces each district to send two teenagers to fight to the death on live television. When Katniss Everdeen volunteers in her sister&rsquo;s place, her survival &mdash; and her defiance &mdash; become must-see TV for a nation that has never seen anything like it.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">District 12</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Sacrifice</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Arena</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <button type="button" class="trailer-btn inline-flex items-center gap-2 rounded-full bg-[#064e3b] px-5 py-2.5 text-xs font-semibold text-[#fcfaf2] shadow-sm transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]" data-video="mfmrPu43DF8" data-title="The Hunger Games — Official Trailer"><i class="fa-solid fa-play text-[10px]"></i> Watch the Trailer</button><span class="text-[11px] text-[#57534e] dark:text-[#b0a48f]">Based on the novel <em>The Hunger Games</em> (2008)</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Film <span class="order-index">01</span> of 5 in this order</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 02 · Catching Fire (2013) -->
+                    <article class="film-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-release="2" data-chronology="3">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">02</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <button type="button" class="trailer-btn group/poster relative block w-full overflow-hidden rounded-xl shadow-lg transition-transform duration-300" data-video="MkvUNfySGQU" data-title="The Hunger Games: Catching Fire — Official Trailer" aria-label="Play the official trailer for The Hunger Games: Catching Fire">
+                                        <img src="assets/image/posters/catching-fire-2013.jpg" alt="The Hunger Games: Catching Fire (2013) theatrical poster" class="aspect-[2/3] w-full object-cover" loading="lazy">
+                                        <span class="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover/poster:bg-black/35">
+                                            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-[#991b1b]/90 text-[#fcfaf2] opacity-0 shadow-lg transition-opacity duration-300 group-hover/poster:opacity-100 dark:bg-[#b02a2a]/90"><i class="fa-solid fa-play ml-0.5"></i></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#b45309]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#92400e] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">
+                                            <i class="fa-solid fa-hourglass-half"></i> The 75th Hunger Games
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Film 2013</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> 2h 11m</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">Catching Fire</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        Katniss and Peeta are champions now &mdash; and the Capitol wants them back. For the 75th Games, a Quarter Quell rounds up past victors, while unrest spreads through the districts. The arena is built to finish what the first Games started.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Quarter Quell</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Uprising</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Arena</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <button type="button" class="trailer-btn inline-flex items-center gap-2 rounded-full bg-[#064e3b] px-5 py-2.5 text-xs font-semibold text-[#fcfaf2] shadow-sm transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]" data-video="MkvUNfySGQU" data-title="The Hunger Games: Catching Fire — Official Trailer"><i class="fa-solid fa-play text-[10px]"></i> Watch the Trailer</button><span class="text-[11px] text-[#57534e] dark:text-[#b0a48f]">Based on the novel <em>Catching Fire</em> (2009)</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Film <span class="order-index">02</span> of 5 in this order</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 03 · Mockingjay – Part 1 (2014) -->
+                    <article class="film-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-release="3" data-chronology="4">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">03</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <button type="button" class="trailer-btn group/poster relative block w-full overflow-hidden rounded-xl shadow-lg transition-transform duration-300" data-video="C_Tsj_wTJkQ" data-title="The Hunger Games: Mockingjay – Part 1 — Official Trailer" aria-label="Play the official trailer for The Hunger Games: Mockingjay – Part 1">
+                                        <img src="assets/image/posters/mockingjay-part-1-2014.jpg" alt="The Hunger Games: Mockingjay – Part 1 (2014) theatrical poster" class="aspect-[2/3] w-full object-cover" loading="lazy">
+                                        <span class="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover/poster:bg-black/35">
+                                            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-[#991b1b]/90 text-[#fcfaf2] opacity-0 shadow-lg transition-opacity duration-300 group-hover/poster:opacity-100 dark:bg-[#b02a2a]/90"><i class="fa-solid fa-play ml-0.5"></i></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#292524]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#292524] dark:bg-[#b02a2a]/25 dark:text-[#f08a8a]">
+                                            <i class="fa-solid fa-fire-flame-simple"></i> The Second Rebellion
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Film 2014</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> 2h 3m</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">Mockingjay &ndash; Part 1</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        The war for Panem begins in the shadows. Katniss is rescued into District 13, where the rebels want her to become the Mockingjay &mdash; the symbol that can unite a fractured nation. It&rsquo;s the quiet, tense half of the finale, and Part 2 needs it.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">District 13</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Propaganda</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">War</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <button type="button" class="trailer-btn inline-flex items-center gap-2 rounded-full bg-[#064e3b] px-5 py-2.5 text-xs font-semibold text-[#fcfaf2] shadow-sm transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]" data-video="C_Tsj_wTJkQ" data-title="The Hunger Games: Mockingjay – Part 1 — Official Trailer"><i class="fa-solid fa-play text-[10px]"></i> Watch the Trailer</button><span class="text-[11px] text-[#57534e] dark:text-[#b0a48f]">Based on the novel <em>Mockingjay</em> (2010), first half</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Film <span class="order-index">03</span> of 5 in this order</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 04 · Mockingjay – Part 2 (2015) -->
+                    <article class="film-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-release="4" data-chronology="5">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">04</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <button type="button" class="trailer-btn group/poster relative block w-full overflow-hidden rounded-xl shadow-lg transition-transform duration-300" data-video="n-7K_OjsDCQ" data-title="The Hunger Games: Mockingjay – Part 2 — Official Trailer" aria-label="Play the official trailer for The Hunger Games: Mockingjay – Part 2">
+                                        <img src="assets/image/posters/mockingjay-part-2-2015.jpg" alt="The Hunger Games: Mockingjay – Part 2 (2015) theatrical poster" class="aspect-[2/3] w-full object-cover" loading="lazy">
+                                        <span class="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover/poster:bg-black/35">
+                                            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-[#991b1b]/90 text-[#fcfaf2] opacity-0 shadow-lg transition-opacity duration-300 group-hover/poster:opacity-100 dark:bg-[#b02a2a]/90"><i class="fa-solid fa-play ml-0.5"></i></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#292524]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#292524] dark:bg-[#b02a2a]/25 dark:text-[#f08a8a]">
+                                            <i class="fa-solid fa-fire-flame-simple"></i> The Second Rebellion
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Film 2015</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> 2h 17m</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">Mockingjay &ndash; Part 2</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        The rebellion marches on the Capitol, and the final battle turns the city itself into the arena. Katniss must decide what the victory is worth &mdash; and what she&rsquo;s willing to become to win it.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Capitol</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Final Battle</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Aftermath</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <button type="button" class="trailer-btn inline-flex items-center gap-2 rounded-full bg-[#064e3b] px-5 py-2.5 text-xs font-semibold text-[#fcfaf2] shadow-sm transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]" data-video="n-7K_OjsDCQ" data-title="The Hunger Games: Mockingjay – Part 2 — Official Trailer"><i class="fa-solid fa-play text-[10px]"></i> Watch the Trailer</button><span class="text-[11px] text-[#57534e] dark:text-[#b0a48f]">Based on the novel <em>Mockingjay</em> (2010), second half</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Film <span class="order-index">04</span> of 5 in this order</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 05 · The Ballad of Songbirds and Snakes (2023) -->
+                    <article class="film-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-release="5" data-chronology="1">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">05</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <button type="button" class="trailer-btn group/poster relative block w-full overflow-hidden rounded-xl shadow-lg transition-transform duration-300" data-video="RDE6Uz73A7g" data-title="The Hunger Games: The Ballad of Songbirds & Snakes — Official Trailer" aria-label="Play the official trailer for The Hunger Games: The Ballad of Songbirds & Snakes">
+                                        <img src="assets/image/posters/ballad-songbirds-snakes-2023.jpg" alt="The Hunger Games: The Ballad of Songbirds & Snakes (2023) theatrical poster" class="aspect-[2/3] w-full object-cover" loading="lazy">
+                                        <span class="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover/poster:bg-black/35">
+                                            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-[#991b1b]/90 text-[#fcfaf2] opacity-0 shadow-lg transition-opacity duration-300 group-hover/poster:opacity-100 dark:bg-[#b02a2a]/90"><i class="fa-solid fa-play ml-0.5"></i></span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#064e3b]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#064e3b] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">
+                                            <i class="fa-solid fa-hourglass-half"></i> The 10th Hunger Games
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Film 2023</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> 2h 37m</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">The Ballad of Songbirds and Snakes</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        Sixty-four years before Katniss, a young Coriolanus Snow mentors Lucy Gray Baird in the 10th Games &mdash; a scrappy, barely-watched contest still finding its feet. Every choice he makes here is the first draft of the president Panem would come to fear.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Prequel</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Young Snow</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Origins</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <button type="button" class="trailer-btn inline-flex items-center gap-2 rounded-full bg-[#064e3b] px-5 py-2.5 text-xs font-semibold text-[#fcfaf2] shadow-sm transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]" data-video="RDE6Uz73A7g" data-title="The Hunger Games: The Ballad of Songbirds & Snakes — Official Trailer"><i class="fa-solid fa-play text-[10px]"></i> Watch the Trailer</button><span class="text-[11px] text-[#57534e] dark:text-[#b0a48f]">Based on the novel <em>The Ballad of Songbirds and Snakes</em> (2020)</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Film <span class="order-index">05</span> of 5 in this order</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- No-adaptation note -->
+                <div class="mt-14">
+                    <div class="flex flex-col rounded-3xl border border-[#e2d8c3] bg-white p-7 dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <div class="flex items-center gap-3">
+                            <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f4ede0] text-[#b45309] dark:bg-[#12100e] dark:text-[#e7b04a]">
+                                <i class="fa-solid fa-book-open text-lg"></i>
+                            </span>
+                            <span class="rounded-full bg-[#f4ede0] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Books only</span>
+                        </div>
+                        <h3 class="mt-4 text-xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">No films (yet) for the rest</h3>
+                        <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                            <em>The Underland Chronicles</em> and the picture books have no screen adaptations, so the movies above are the complete Collins viewing experience for now. If you want those worlds too, start with <a href="collections.html" class="transition-link font-semibold text-[#064e3b] hover:underline dark:text-[#e7b04a]">Collections</a> &mdash; or keep watching Panem with the <a href="map.html" class="transition-link font-semibold text-[#064e3b] hover:underline dark:text-[#e7b04a]">Map of Panem</a> open beside you.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ── FOOTER ───────────────────────────────────────────────────────── -->
+    <footer id="site-footer" class="bg-[#fcfaf2] border-t border-[#e2d8c3] dark:bg-[#12100e] dark:border-[#3b342c]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="flex flex-col gap-8 border-b border-[#e2d8c3] py-10 dark:border-[#3b342c] md:flex-row md:items-center md:justify-between">
+                <div>
+                    <a href="index.html" class="font-serif tracking-widest text-lg font-bold uppercase text-[#292524] hover:text-[#064e3b] dark:text-[#ece2cf] dark:hover:text-[#f4ca72] transition-colors">Suzanne Collins</a>
+                    <p class="mt-1 text-xs sm:text-sm text-[#57534e] dark:text-[#b0a48f]">Literary works and chronicles.</p>
+                </div>
+                <nav class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold">
+                    <a href="index.html" class="text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Home</a>
+                    <a href="map.html" class="text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Map of Panem</a>
+                    <a href="collections.html" class="text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Collections</a>
+                    <a href="biography.html" class="transition-link text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Biography</a>
+                    <a href="viewing-guide.html" class="text-[#064e3b] dark:text-[#e7b04a]">Viewing Guide</a>
+                </nav>
+                <div class="flex items-center gap-3">
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="X">
+                        <i class="fa-brands fa-x-twitter text-sm"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram text-sm"></i>
+                    </a>
+                    <a href="https://goodreads.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Goodreads">
+                        <i class="fa-brands fa-goodreads-g text-sm"></i>
+                    </a>
+                    <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Official Website">
+                        <i class="fa-solid fa-globe text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center justify-between gap-3 py-8 text-xs text-[#57534e] dark:text-[#b0a48f] sm:flex-row">
+                <p>&copy; 2026 Suzanne Collins. All rights reserved. Original reference: <a href="https://www.suzannecollinsbooks.com" class="font-medium text-[#7c2d12] hover:underline dark:text-[#f08a8a]">suzannecollinsbooks.com</a>.</p>
+                <p>Designed with Semantic HTML5 &amp; Tailwind CSS.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to top -->
+    <button id="to-top" class="fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-[#e2d8c3] bg-white/95 text-[#064e3b] shadow-lg backdrop-blur-sm transition-colors duration-300 hover:bg-[#f4ede0] opacity-0 pointer-events-none translate-y-2 dark:border-[#3b342c] dark:bg-[#211d19]/95 dark:text-[#e7b04a] dark:hover:bg-[#2c2721]" aria-label="Back to top">
+        <i class="fa-solid fa-arrow-up text-sm"></i>
+    </button>
+
+
+    <!-- ── TRAILER MODAL ──────────────────────────────────────────────── -->
+    <div id="trailer-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="trailer-title">
+        <div id="trailer-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div class="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-[#3b342c] bg-[#12100e] shadow-2xl dark:border-[#3b342c]">
+            <div class="flex items-center justify-between gap-4 border-b border-[#3b342c] px-5 py-3">
+                <h3 id="trailer-title" class="font-serif text-sm font-bold text-[#f1e7d4] sm:text-base">Official Trailer</h3>
+                <button id="trailer-close" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#211d19] text-[#f1e7d4] transition-colors hover:bg-[#b02a2a]" aria-label="Close trailer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="aspect-video w-full bg-black">
+                <iframe id="trailer-frame" class="h-full w-full" src="" title="Official trailer player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ── Dark / light mode ────────────────────────────────────────── */
+        const html = document.documentElement;
+        const themeButtons = document.querySelectorAll('.theme-toggle');
+
+        function applyTheme(dark) {
+            html.classList.toggle('dark', dark);
+            html.style.colorScheme = dark ? 'dark' : 'light';
+            themeButtons.forEach((btn) => {
+                btn.innerHTML = dark
+                    ? '<i class="fa-solid fa-sun text-sm"></i>'
+                    : '<i class="fa-solid fa-moon text-sm"></i>';
+                btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+                btn.setAttribute('title', dark ? 'Switch to light mode' : 'Switch to dark mode');
+            });
+        }
+
+        const stored = localStorage.getItem('sc-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(stored ? stored === 'dark' : prefersDark);
+
+        themeButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const isDark = !html.classList.contains('dark');
+                applyTheme(isDark);
+                localStorage.setItem('sc-theme', isDark ? 'dark' : 'light');
+            });
+        });
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'sc-theme') applyTheme(e.newValue === 'dark');
+        });
+
+        /* ── Mobile menu ──────────────────────────────────────────────── */
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.toggle('hidden');
+                menuBtn.setAttribute('aria-expanded', String(!isHidden));
+            });
+            mobileMenu.querySelectorAll('a').forEach((link) => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+
+        /* ── Film order toggle (release ↔ chronology) ─────────────────── */
+        const orderButtons = document.querySelectorAll('.order-btn');
+        const filmList = document.getElementById('film-list');
+        const orderNote = document.getElementById('order-note');
+        const filmEntries = filmList ? Array.from(filmList.querySelectorAll('.film-entry')) : [];
+
+        const activeClasses = ['bg-[#064e3b]', 'text-[#fcfaf2]', 'shadow-sm', 'dark:bg-[#b02a2a]', 'dark:text-[#f6efdf]'];
+        const inactiveClasses = ['text-[#57534e]', 'hover:text-[#064e3b]', 'dark:text-[#b0a48f]', 'dark:hover:text-[#f4ca72]'];
+
+        function setOrder(mode) {
+            if (!filmList) return;
+
+            const sorted = [...filmEntries].sort(
+                (a, b) => Number(a.dataset[mode]) - Number(b.dataset[mode])
+            );
+
+            sorted.forEach((entry) => {
+                entry.style.opacity = '0';
+                entry.style.transform = 'translateY(10px)';
+            });
+
+            requestAnimationFrame(() => {
+                sorted.forEach((entry, index) => {
+                    filmList.appendChild(entry);
+                    entry.querySelectorAll('.order-index').forEach((node) => {
+                        node.textContent = String(index + 1).padStart(2, '0');
+                    });
+                });
+
+                requestAnimationFrame(() => {
+                    sorted.forEach((entry) => {
+                        entry.style.opacity = '';
+                        entry.style.transform = '';
+                    });
+                });
+            });
+
+            orderNote.innerHTML = mode === 'release'
+                ? '<strong class="font-semibold text-[#064e3b] dark:text-[#e7b04a]">Release order:</strong> the order audiences first watched them &mdash; recommended for a first marathon.'
+                : '<strong class="font-semibold text-[#064e3b] dark:text-[#e7b04a]">In-world chronology:</strong> the saga as it happens &mdash; from the 10th Hunger Games to the fall of the Capitol.';
+
+            orderButtons.forEach((btn) => {
+                const isActive = btn.dataset.order === mode;
+                btn.setAttribute('aria-pressed', String(isActive));
+                activeClasses.forEach((cls) => btn.classList.toggle(cls, isActive));
+                inactiveClasses.forEach((cls) => btn.classList.toggle(cls, !isActive));
+            });
+        }
+
+        orderButtons.forEach((btn) => {
+            btn.addEventListener('click', () => setOrder(btn.dataset.order));
+        });
+
+        /* ── Trailer modal (in-page YouTube embed) ────────────────────── */
+        const trailerModal = document.getElementById('trailer-modal');
+        const trailerFrame = document.getElementById('trailer-frame');
+        const trailerTitle = document.getElementById('trailer-title');
+        const trailerClose = document.getElementById('trailer-close');
+        const trailerBackdrop = document.getElementById('trailer-backdrop');
+
+        function openTrailer(videoId, title) {
+            if (!trailerModal || !videoId) return;
+            trailerTitle.textContent = title || 'Official Trailer';
+            trailerFrame.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0';
+            trailerModal.classList.remove('hidden');
+            trailerModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            trailerClose.focus();
+        }
+
+        function closeTrailer() {
+            if (!trailerModal) return;
+            trailerFrame.src = '';
+            trailerModal.classList.add('hidden');
+            trailerModal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.trailer-btn').forEach((btn) => {
+            btn.addEventListener('click', () => openTrailer(btn.dataset.video, btn.dataset.title));
+        });
+
+        if (trailerClose) trailerClose.addEventListener('click', closeTrailer);
+        if (trailerBackdrop) trailerBackdrop.addEventListener('click', closeTrailer);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeTrailer();
+        });
+
+        /* ── Back to top ──────────────────────────────────────────────── */
+        const toTop = document.getElementById('to-top');
+
+        function toggleToTop() {
+            if (!toTop) return;
+            const visible = window.scrollY > 500;
+            toTop.classList.toggle('opacity-0', !visible);
+            toTop.classList.toggle('pointer-events-none', !visible);
+            toTop.classList.toggle('translate-y-2', !visible);
+        }
+
+        if (toTop) {
+            window.addEventListener('scroll', toggleToTop, { passive: true });
+            toggleToTop();
+            toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        }
+
+        /* ── Smooth page transitions ──────────────────────────────────── */
+        document.querySelectorAll('a.transition-link').forEach((link) => {
+            link.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#')) return;
+
+                e.preventDefault();
+                document.body.classList.add('page-slide-out-right');
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 260);
+            });
+        });
+    </script>
+
+</body>
+</html>

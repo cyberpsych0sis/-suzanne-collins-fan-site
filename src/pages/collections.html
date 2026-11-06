@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Explore Suzanne Collins' complete library by series and follow Panem in the chronological order of its story, from the 10th Hunger Games to the Second Rebellion.">
+    <title>Collections | Suzanne Collins Official Author Website</title>
+    <!-- Apply the saved theme before first paint so dark mode never flashes light -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('sc-theme');
+                var dark = saved ? saved === 'dark'
+                                 : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark', dark);
+                document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+            } catch (e) { /* ignore private-mode storage errors */ }
+        })();
+    </script>
+    <meta name="view-transition" content="same-origin">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        academia: {
+                            parchment: '#fcfaf2',
+                            cream:     '#f4ede0',
+                            card:      '#ffffff',
+                            border:    '#e2d8c3',
+                            burgundy:  '#7c2d12',
+                            gold:      '#b45309',
+                            ink:       '#292524',
+                            muted:     '#57534e'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Georgia', 'Cambria', 'Baskerville', 'Times New Roman', 'serif'],
+                        sans:  ['system-ui', '-apple-system', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Smooth slide transitions between pages -->
+    <style>
+        @keyframes pageSlideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        body {
+            /* "backwards" clears the transform after the animation ends so
+               position: fixed descendants stay fixed to the viewport. */
+            animation: pageSlideInFromLeft 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+        .page-slide-out-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+            @media (prefers-reduced-motion: reduce) { body { animation: none; } .page-slide-out-right { transition: none; } }
+    </style>
+</head>
+<body class="bg-[#fcfaf2] dark:bg-[#12100e] text-[#292524] dark:text-[#f1e7d4] font-sans antialiased selection:bg-[#7c2d12] selection:text-[#fcfaf2] transition-colors duration-300 dark:selection:bg-[#b02a2a] dark:selection:text-[#f6efdf]">
+
+    <!-- ── FIXED HEADER ─────────────────────────────────────────────────── -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-[#fcfaf2]/90 dark:bg-[#12100e]/90 backdrop-blur-md border-b border-[#e2d8c3] dark:border-[#3b342c] transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <a href="index.html" class="group flex items-center gap-2 py-2">
+                    <span class="font-serif tracking-widest text-2xl font-bold uppercase text-[#0f172a] dark:text-[#f1e7d4] group-hover:text-[#064e3b] dark:group-hover:text-[#f4ca72] transition-colors">SC</span>
+                    <span class="hidden sm:inline text-xs font-serif italic text-[#57534e] dark:text-[#b0a48f]">&bull; The Complete Library</span>
+                </a>
+                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+                    <a href="index.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Home</a>
+                    <a href="map.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Map of Panem</a>
+                    <a href="collections.html" aria-current="page" class="text-[#064e3b] dark:text-[#e7b04a] transition-colors">Collections</a>
+                    <a href="biography.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Biography</a>
+                    <a href="viewing-guide.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Viewing Guide</a>
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors shadow-xs" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                </nav>
+
+                <!-- Mobile controls -->
+                <div class="flex items-center gap-2 md:hidden">
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="p-2 text-[#0f172a] hover:text-[#064e3b] dark:text-[#f1e7d4] dark:hover:text-[#f4ca72] transition-colors" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-menu">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-3 pb-5 space-y-1 bg-[#fcfaf2]/95 backdrop-blur-md border-b border-[#e2d8c3] shadow-md dark:bg-[#12100e]/95 dark:border-[#3b342c]">
+            <a href="index.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Home</a>
+            <a href="map.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Map of Panem</a>
+            <a href="collections.html" class="block rounded-lg px-3 py-2 bg-[#064e3b]/10 text-[#064e3b] font-semibold dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">Collections</a>
+            <a href="biography.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Biography</a>
+            <a href="viewing-guide.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Viewing Guide</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- ══ HERO ═════════════════════════════════════════════════════════ -->
+        <section id="top" class="relative overflow-hidden pt-32 pb-24 lg:pt-40 lg:pb-32 border-b border-[#e2d8c3] dark:border-[#3b342c] bg-cover bg-center bg-no-repeat" style="background-image: url('assets/image/misty-forest.jpg');">
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#fcfaf2]/30 via-[#fcfaf2]/75 to-[#fcfaf2] dark:from-[#12100e]/55 dark:via-[#12100e]/80 dark:to-[#12100e]"></div>
+            <div class="pointer-events-none absolute inset-0 hidden dark:block bg-[#0b0a09]/55"></div>
+            <div class="pointer-events-none absolute inset-0 hidden dark:block bg-[radial-gradient(ellipse_at_50%_-10%,rgba(231,176,74,0.18),transparent_55%)]"></div>
+            <div class="pointer-events-none absolute inset-0 hidden dark:block bg-[radial-gradient(ellipse_at_50%_115%,rgba(176,42,42,0.20),transparent_55%)]"></div>
+
+            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-[#fcfaf2]/95 backdrop-blur-sm border border-[#064e3b]/30 text-[#064e3b] mb-6 shadow-sm dark:bg-[#12100e]/95 dark:border-[#b02a2a]/40 dark:text-[#e7b04a]">
+                    <i class="fa-solid fa-layer-group text-[#d97706] dark:text-[#e7b04a]"></i> The Complete Library
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-[#0f172a] leading-tight mb-6 drop-shadow-sm dark:text-[#f1e7d4]">
+                    Every Story,<br>
+                    <span class="italic text-[#064e3b] dark:text-[#e7b04a] dark:drop-shadow-[0_0_22px_rgba(231,176,74,0.35)]">In Its Own Time</span>
+                </h1>
+
+                <p class="max-w-2xl mx-auto text-base sm:text-lg text-[#1e293b] leading-relaxed mb-10 font-medium drop-shadow-xs dark:text-[#d5c9b4]">
+                    Explore Suzanne Collins&rsquo; collected works by series &mdash; then follow Panem from the 10th Hunger Games to the fall of the Capitol. Two ways to read, one unforgettable world.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#hunger-games" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#064e3b] hover:bg-[#022c22] text-[#fcfaf2] font-semibold text-base transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 group dark:bg-[#b02a2a] dark:hover:bg-[#8c1f22] dark:text-[#f6efdf]">
+                        <span>Follow the Panem Timeline</span>
+                        <i class="fa-solid fa-arrow-down text-xs text-[#d97706] group-hover:translate-y-0.5 transition-transform dark:text-[#e7b04a]"></i>
+                    </a>
+                    <a href="#series" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white/95 hover:bg-white border border-[#064e3b]/30 text-[#0f172a] hover:text-[#064e3b] font-semibold text-base transition-colors shadow-sm flex items-center justify-center gap-2 dark:bg-[#211d19]/95 dark:hover:bg-[#2c2721] dark:border-[#b02a2a]/40 dark:text-[#f1e7d4] dark:hover:text-[#f4ca72]">
+                        <i class="fa-solid fa-book-open text-[#d97706] dark:text-[#e7b04a]"></i>
+                        <span>Browse Every Series</span>
+                    </a>
+                </div>
+
+                <div class="mx-auto mt-12 grid max-w-2xl grid-cols-3 divide-x divide-[#e2d8c3] overflow-hidden rounded-2xl border border-[#e2d8c3] bg-white/85 shadow-sm backdrop-blur-sm dark:divide-[#3b342c] dark:border-[#3b342c] dark:bg-[#211d19]/85">
+                    <div class="px-3 py-5">
+                        <p class="font-serif text-2xl sm:text-3xl font-bold text-[#064e3b] dark:text-[#e7b04a]">3</p>
+                        <p class="mt-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">Collections</p>
+                    </div>
+                    <div class="px-3 py-5">
+                        <p class="font-serif text-2xl sm:text-3xl font-bold text-[#064e3b] dark:text-[#e7b04a]">12</p>
+                        <p class="mt-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">Books</p>
+                    </div>
+                    <div class="px-3 py-5">
+                        <p class="font-serif text-2xl sm:text-3xl font-bold text-[#064e3b] dark:text-[#e7b04a]">64</p>
+                        <p class="mt-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">Years of Panem</p>
+                    </div>
+                </div>
+
+                <a href="#series" class="mt-10 inline-flex items-center gap-2 rounded-full border border-[#e2d8c3] bg-white/80 px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[#57534e] hover:text-[#064e3b] hover:border-[#064e3b]/50 dark:text-[#b0a48f] dark:hover:text-[#e7b04a] dark:border-[#3b342c] dark:bg-[#211d19]/80 transition-colors" aria-label="Scroll to the collections">
+                    Scroll to explore
+                    <i class="fa-solid fa-chevron-down animate-bounce text-xs"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- ══ SERIES OVERVIEW ══════════════════════════════════════════════ -->
+        <section id="series" class="scroll-mt-24 py-20 bg-[#fcfaf2] dark:bg-[#12100e]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-14">
+                    <h2 class="text-xs uppercase tracking-widest text-[#b45309] font-bold mb-2 dark:text-[#e7b04a]">The Library</h2>
+                    <h3 class="text-3xl sm:text-4xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">Three Collections, One Author</h3>
+                    <p class="mt-3 text-[#57534e] text-base dark:text-[#b0a48f]">Each series is gathered in one place and ordered by when its story takes place &mdash; not simply by release date.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                    <!-- The Hunger Games -->
+                    <a href="#hunger-games" class="group relative flex flex-col overflow-hidden rounded-3xl border-2 border-[#064e3b]/25 bg-white p-7 shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:border-[#064e3b] hover:shadow-xl dark:border-[#b02a2a]/40 dark:bg-[#211d19] dark:hover:border-[#b02a2a]">
+                        <div class="flex items-start justify-between">
+                            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#064e3b] text-[#fcfaf2] shadow-md dark:bg-[#b02a2a] dark:text-[#f6efdf]">
+                                <i class="fa-solid fa-fire text-xl text-[#e7b04a]"></i>
+                            </div>
+                            <span class="font-serif text-4xl font-bold text-[#064e3b]/15 dark:text-[#e7b04a]/20">01</span>
+                        </div>
+                        <h4 class="mt-5 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">The Hunger Games</h4>
+                        <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">Dystopian suspense set in Panem, from the earliest Games to the war that breaks the Capitol.</p>
+                        <div class="mt-5 flex flex-wrap items-center gap-2">
+                            <span class="rounded-full bg-[#064e3b]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#064e3b] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">5 Novels</span>
+                            <span class="rounded-full bg-[#b45309]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#92400e] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">64 Years</span>
+                        </div>
+                        <div class="mt-auto flex items-center justify-between border-t border-[#e2d8c3] pt-5 dark:border-[#3b342c]">
+                            <span class="text-xs text-[#57534e] dark:text-[#b0a48f]">In-world chronology</span>
+                            <span class="inline-flex items-center gap-1 text-sm font-semibold text-[#064e3b] dark:text-[#e7b04a]">Explore <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-0.5"></i></span>
+                        </div>
+                    </a>
+
+                    <!-- The Underland Chronicles -->
+                    <a href="#underland" class="group relative flex flex-col overflow-hidden rounded-3xl border-2 border-[#b45309]/25 bg-white p-7 shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:border-[#b45309] hover:shadow-xl dark:border-[#e7b04a]/30 dark:bg-[#211d19] dark:hover:border-[#e7b04a]">
+                        <div class="flex items-start justify-between">
+                            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#78350f] text-[#fcfaf2] shadow-md dark:bg-[#8a5a12] dark:text-[#f6efdf]">
+                                <i class="fa-solid fa-dungeon text-xl text-[#fcd34d]"></i>
+                            </div>
+                            <span class="font-serif text-4xl font-bold text-[#b45309]/15 dark:text-[#e7b04a]/20">02</span>
+                        </div>
+                        <h4 class="mt-5 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">The Underland Chronicles</h4>
+                        <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">A subterranean fantasy saga following Gregor&rsquo;s descent beneath New York City.</p>
+                        <div class="mt-5 flex flex-wrap items-center gap-2">
+                            <span class="rounded-full bg-[#b45309]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#92400e] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">5 Novels</span>
+                            <span class="rounded-full bg-[#78350f]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#78350f] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">2003&ndash;07</span>
+                        </div>
+                        <div class="mt-auto flex items-center justify-between border-t border-[#e2d8c3] pt-5 dark:border-[#3b342c]">
+                            <span class="text-xs text-[#57534e] dark:text-[#b0a48f]">Reading order = story order</span>
+                            <span class="inline-flex items-center gap-1 text-sm font-semibold text-[#b45309] dark:text-[#e7b04a]">Explore <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-0.5"></i></span>
+                        </div>
+                    </a>
+
+                    <!-- Picture books & standalones -->
+                    <a href="#standalones" class="group relative flex flex-col overflow-hidden rounded-3xl border-2 border-[#7c2d12]/25 bg-white p-7 shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:border-[#7c2d12] hover:shadow-xl dark:border-[#f08a8a]/25 dark:bg-[#211d19] dark:hover:border-[#f08a8a]">
+                        <div class="flex items-start justify-between">
+                            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#7c2d12] text-[#fcfaf2] shadow-md dark:bg-[#8c1f22] dark:text-[#f6efdf]">
+                                <i class="fa-solid fa-palette text-xl text-[#fcd34d]"></i>
+                            </div>
+                            <span class="font-serif text-4xl font-bold text-[#7c2d12]/15 dark:text-[#f08a8a]/20">03</span>
+                        </div>
+                        <h4 class="mt-5 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">Picture Books &amp; Standalones</h4>
+                        <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">Illustrated stories that step outside Panem and the Underland to explore family and imagination.</p>
+                        <div class="mt-5 flex flex-wrap items-center gap-2">
+                            <span class="rounded-full bg-[#7c2d12]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#7c2d12] dark:bg-[#f08a8a]/10 dark:text-[#f08a8a]">2 Titles</span>
+                            <span class="rounded-full bg-[#b45309]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#92400e] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">2005 &amp; 2013</span>
+                        </div>
+                        <div class="mt-auto flex items-center justify-between border-t border-[#e2d8c3] pt-5 dark:border-[#3b342c]">
+                            <span class="text-xs text-[#57534e] dark:text-[#b0a48f]">Illustrated works</span>
+                            <span class="inline-flex items-center gap-1 text-sm font-semibold text-[#7c2d12] dark:text-[#f08a8a]">Explore <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-0.5"></i></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ SERIES 01 · THE HUNGER GAMES ════════════════════════════════ -->
+        <section id="hunger-games" class="scroll-mt-24 py-20 bg-[#f4ede0] border-y border-[#e2d8c3] dark:bg-[#191613] dark:border-[#3b342c]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+                    <div class="max-w-2xl">
+                        <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#064e3b] dark:text-[#e7b04a]">
+                            <span class="h-px w-6 bg-current"></span> Series 01 &middot; Dystopian
+                        </div>
+                        <h2 class="mt-3 text-3xl sm:text-5xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">The Hunger Games</h2>
+                        <p class="mt-4 text-sm sm:text-base leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                            Five novels, one long revolution. The saga spans 64 years of Panem&rsquo;s history &mdash; from the Capitol&rsquo;s earliest Games to the war that breaks it. Use the switch to read the story in the order it happens or in the order the books were published.
+                        </p>
+                    </div>
+
+                    <div class="shrink-0">
+                        <p class="mb-2 text-[11px] font-bold uppercase tracking-widest text-[#57534e] dark:text-[#b0a48f]">Arrange by</p>
+                        <div class="inline-flex flex-col gap-1 rounded-2xl border border-[#e2d8c3] bg-white p-1 shadow-sm dark:border-[#3b342c] dark:bg-[#211d19] sm:flex-row sm:rounded-full" role="group" aria-label="Arrange The Hunger Games by">
+                            <button type="button" class="order-btn inline-flex items-center justify-center gap-2 rounded-full bg-[#064e3b] px-4 py-2 text-xs font-semibold text-[#fcfaf2] shadow-sm transition-colors dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:text-sm" data-order="chronology" aria-pressed="true" aria-controls="hg-list">
+                                <i class="fa-solid fa-timeline text-[11px]"></i> In-World Chronology
+                            </button>
+                            <button type="button" class="order-btn inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-semibold text-[#57534e] transition-colors hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] sm:text-sm" data-order="publication" aria-pressed="false" aria-controls="hg-list">
+                                <i class="fa-regular fa-calendar text-[11px]"></i> Publication Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="order-note" class="mt-6 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]" aria-live="polite">
+                    <strong class="font-semibold text-[#064e3b] dark:text-[#e7b04a]">In-world chronology:</strong> the saga as it happens &mdash; from the 10th Hunger Games to the Second Rebellion.
+                </p>
+
+                <!-- At-a-glance timeline -->
+                <div class="mt-8 rounded-2xl border border-[#e2d8c3] bg-white/85 p-5 shadow-sm backdrop-blur-sm dark:border-[#3b342c] dark:bg-[#211d19]/85">
+                    <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#b45309] dark:text-[#e7b04a]">
+                        <i class="fa-solid fa-route"></i> The Panem timeline at a glance
+                    </div>
+                    <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
+                        <div class="rounded-xl border border-[#e2d8c3] border-t-2 border-t-[#064e3b] bg-[#fcfaf2] p-3 text-center dark:border-[#3b342c] dark:border-t-[#e7b04a] dark:bg-[#12100e]">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">10th Games</p>
+                            <p class="mt-1 text-xs font-semibold text-[#0f172a] dark:text-[#f1e7d4]">64 years before</p>
+                        </div>
+                        <div class="rounded-xl border border-[#e2d8c3] border-t-2 border-t-[#991b1b] bg-[#fcfaf2] p-3 text-center dark:border-[#3b342c] dark:border-t-[#b02a2a] dark:bg-[#12100e]">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">50th Games</p>
+                            <p class="mt-1 text-xs font-semibold text-[#0f172a] dark:text-[#f1e7d4]">24 years before</p>
+                        </div>
+                        <div class="rounded-xl border border-[#e2d8c3] border-t-2 border-t-[#b45309] bg-[#fcfaf2] p-3 text-center dark:border-[#3b342c] dark:border-t-[#e7b04a] dark:bg-[#12100e]">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">74th Games</p>
+                            <p class="mt-1 text-xs font-semibold text-[#0f172a] dark:text-[#f1e7d4]">Year zero</p>
+                        </div>
+                        <div class="rounded-xl border border-[#e2d8c3] border-t-2 border-t-[#d97706] bg-[#fcfaf2] p-3 text-center dark:border-[#3b342c] dark:border-t-[#e7b04a] dark:bg-[#12100e]">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">75th Games</p>
+                            <p class="mt-1 text-xs font-semibold text-[#0f172a] dark:text-[#f1e7d4]">One year later</p>
+                        </div>
+                        <div class="col-span-2 rounded-xl border border-[#e2d8c3] border-t-2 border-t-[#292524] bg-[#fcfaf2] p-3 text-center dark:border-[#3b342c] dark:border-t-[#b0a48f] dark:bg-[#12100e] sm:col-span-1">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">Rebellion</p>
+                            <p class="mt-1 text-xs font-semibold text-[#0f172a] dark:text-[#f1e7d4]">The final chapter</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chronology list -->
+                <div id="hg-list" class="relative mt-14">
+                    <div class="pointer-events-none absolute left-5 top-2 bottom-2 w-px bg-gradient-to-b from-[#b45309] via-[#064e3b] to-[#991b1b] dark:from-[#e7b04a] dark:via-[#b02a2a] dark:to-[#3b342c] sm:left-6"></div>
+
+                    <!-- 01 · The Ballad of Songbirds and Snakes -->
+                    <article class="hg-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-chronology="1" data-publication="4">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">01</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <div class="relative flex aspect-[2/3] w-full flex-col justify-between overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#1e3a2f] via-[#2f5d45] to-[#0f221b] p-4 text-center text-[#f6efdf] shadow-lg">
+                                        <div class="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full border border-white/10"></div>
+                                        <div class="pointer-events-none absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-white/5"></div>
+                                        <div class="relative">
+                                            <p class="text-[7px] font-bold uppercase tracking-[0.22em] text-amber-200">A Hunger Games Novel</p>
+                                            <div class="mx-auto mt-2 h-px w-8 bg-amber-300/60"></div>
+                                        </div>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-feather-pointed mb-2 text-2xl text-amber-300"></i>
+                                            <p class="font-serif text-[11px] font-bold leading-snug tracking-wide sm:text-xs">THE BALLAD OF<br>SONGBIRDS<br>&amp; SNAKES</p>
+                                        </div>
+                                        <div class="relative border-t border-white/20 pt-2">
+                                            <p class="text-[7px] uppercase tracking-widest text-white">The 10th Hunger Games</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#064e3b]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#064e3b] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">
+                                            <i class="fa-solid fa-hourglass-half"></i> The 10th Hunger Games
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Published 2020</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> 64 years before</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">The Ballad of Songbirds and Snakes</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        Before he was the Capitol&rsquo;s president, Coriolanus Snow was a student assigned to mentor Lucy Gray Baird, a tribute from District 12. As the Games struggle for an audience, ambition and affection become the same dangerous game.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Dark Days</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Mentorship</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Origins</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <span class="text-xs font-semibold text-[#57534e] dark:text-[#b0a48f]"><i class="fa-regular fa-user mr-1 text-[#b45309] dark:text-[#e7b04a]"></i> Coriolanus Snow</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Book <span class="order-index">01</span> of 5 in this order</span>
+                                    </div>
+                                    <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 02 · Sunrise on the Reaping -->
+                    <article class="hg-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-chronology="2" data-publication="5">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">02</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <div class="relative flex aspect-[2/3] w-full flex-col justify-between overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#7f1d1d] via-[#991b1b] to-[#450a0a] p-4 text-center text-[#f6efdf] shadow-lg">
+                                        <div class="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full border border-white/10"></div>
+                                        <div class="pointer-events-none absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-white/5"></div>
+                                        <div class="relative">
+                                            <p class="text-[7px] font-bold uppercase tracking-[0.22em] text-amber-200">A Hunger Games Novel</p>
+                                            <div class="mx-auto mt-2 h-px w-8 bg-amber-300/60"></div>
+                                        </div>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-sun mb-2 text-2xl text-amber-300"></i>
+                                            <p class="font-serif text-[11px] font-bold leading-snug tracking-wide sm:text-xs">SUNRISE<br><span class="font-light tracking-widest">ON THE</span><br>REAPING</p>
+                                        </div>
+                                        <div class="relative border-t border-white/20 pt-2">
+                                            <p class="text-[7px] uppercase tracking-widest text-white">The 50th Hunger Games</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#991b1b]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#991b1b] dark:bg-[#b02a2a]/20 dark:text-[#f08a8a]">
+                                            <i class="fa-solid fa-hourglass-half"></i> The 50th Hunger Games
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Published March 18, 2025</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> 24 years before</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">Sunrise on the Reaping</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        The Second Quarter Quell doubles the tributes, and District 12&rsquo;s Haymitch Abernathy is sent into an arena built to remind the districts of their powerlessness. Survival will demand more than strength.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#991b1b]/10 px-2.5 py-1 text-[10px] font-semibold text-[#991b1b] dark:bg-[#b02a2a]/15 dark:text-[#f08a8a]">Second Quarter Quell</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Propaganda</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Survival</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <span class="text-xs font-semibold text-[#57534e] dark:text-[#b0a48f]"><i class="fa-regular fa-user mr-1 text-[#b45309] dark:text-[#e7b04a]"></i> Haymitch Abernathy</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Book <span class="order-index">02</span> of 5 in this order</span>
+                                    </div>
+                                    <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 03 · The Hunger Games -->
+                    <article class="hg-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-chronology="3" data-publication="1">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">03</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <div class="relative flex aspect-[2/3] w-full flex-col justify-between overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#1c1917] via-[#292524] to-[#0c0a09] p-4 text-center text-[#f6efdf] shadow-lg">
+                                        <div class="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full border border-[#e7b04a]/20"></div>
+                                        <div class="pointer-events-none absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-[#e7b04a]/5"></div>
+                                        <div class="relative">
+                                            <p class="text-[7px] font-bold uppercase tracking-[0.22em] text-amber-200">A Hunger Games Novel</p>
+                                            <div class="mx-auto mt-2 h-px w-8 bg-amber-300/60"></div>
+                                        </div>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-fire mb-2 text-2xl text-amber-400"></i>
+                                            <p class="font-serif text-xs font-bold leading-snug tracking-wide sm:text-sm">THE<br>HUNGER<br>GAMES</p>
+                                        </div>
+                                        <div class="relative border-t border-white/20 pt-2">
+                                            <p class="text-[7px] uppercase tracking-widest text-white">The 74th Hunger Games</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#064e3b]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#064e3b] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">
+                                            <i class="fa-solid fa-hourglass-half"></i> The 74th Hunger Games
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Published 2008</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> Year zero</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">The Hunger Games</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        Katniss Everdeen volunteers in her sister&rsquo;s place and enters the 74th Hunger Games. In the Capitol&rsquo;s arena, survival and defiance become the same act &mdash; and a nation begins to watch.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">District 12</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Sacrifice</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Defiance</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <span class="text-xs font-semibold text-[#57534e] dark:text-[#b0a48f]"><i class="fa-regular fa-user mr-1 text-[#b45309] dark:text-[#e7b04a]"></i> Katniss Everdeen</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Book <span class="order-index">03</span> of 5 in this order</span>
+                                    </div>
+                                    <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 04 · Catching Fire -->
+                    <article class="hg-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-chronology="4" data-publication="2">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">04</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <div class="relative flex aspect-[2/3] w-full flex-col justify-between overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#78350f] via-[#92400e] to-[#451a03] p-4 text-center text-[#f6efdf] shadow-lg">
+                                        <div class="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full border border-white/10"></div>
+                                        <div class="pointer-events-none absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-white/5"></div>
+                                        <div class="relative">
+                                            <p class="text-[7px] font-bold uppercase tracking-[0.22em] text-amber-200">A Hunger Games Novel</p>
+                                            <div class="mx-auto mt-2 h-px w-8 bg-amber-200/60"></div>
+                                        </div>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-fire-flame-curved mb-2 text-2xl text-amber-200"></i>
+                                            <p class="font-serif text-xs font-bold leading-snug tracking-wide sm:text-sm">CATCHING<br>FIRE</p>
+                                        </div>
+                                        <div class="relative border-t border-white/20 pt-2">
+                                            <p class="text-[7px] uppercase tracking-widest text-white">The 75th Hunger Games</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#b45309]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#92400e] dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">
+                                            <i class="fa-solid fa-hourglass-half"></i> The 75th Hunger Games
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Published 2009</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> One year later</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">Catching Fire</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        The Third Quarter Quell forces past victors back into the arena. As the districts begin to rise, Katniss becomes the reluctant face of a rebellion she never meant to start.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Quarter Quell</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Uprising</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Arena</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <span class="text-xs font-semibold text-[#57534e] dark:text-[#b0a48f]"><i class="fa-regular fa-user mr-1 text-[#b45309] dark:text-[#e7b04a]"></i> Katniss Everdeen</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Book <span class="order-index">04</span> of 5 in this order</span>
+                                    </div>
+                                    <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 05 · Mockingjay -->
+                    <article class="hg-entry group relative pb-12 pl-14 transition-colors duration-300 last:pb-0 sm:pl-20" data-chronology="5" data-publication="3">
+                        <span class="absolute left-5 top-7 z-10 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4ede0] bg-[#064e3b] font-mono text-[11px] font-bold text-[#fcfaf2] shadow-md dark:border-[#191613] dark:bg-[#b02a2a] dark:text-[#f6efdf] sm:left-6">
+                            <span class="order-index">05</span>
+                        </span>
+                        <div class="overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 group-hover:-translate-y-0.5 group-hover:border-[#064e3b]/40 group-hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19] dark:group-hover:border-[#b02a2a]/60">
+                            <div class="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-7">
+                                <div class="mx-auto w-32 shrink-0 sm:mx-0 sm:w-40">
+                                    <div class="relative flex aspect-[2/3] w-full flex-col justify-between overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-[#292524] via-[#3f3a34] to-[#12100e] p-4 text-center text-[#f6efdf] shadow-lg">
+                                        <div class="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full border border-[#f08a8a]/20"></div>
+                                        <div class="pointer-events-none absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-[#b02a2a]/10"></div>
+                                        <div class="relative">
+                                            <p class="text-[7px] font-bold uppercase tracking-[0.22em] text-[#f08a8a]/90">A Hunger Games Novel</p>
+                                            <div class="mx-auto mt-2 h-px w-8 bg-[#f08a8a]/60"></div>
+                                        </div>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-dove mb-2 text-2xl text-[#f08a8a]"></i>
+                                            <p class="font-serif text-sm font-bold leading-snug tracking-wide">MOCKINGJAY</p>
+                                        </div>
+                                        <div class="relative border-t border-white/20 pt-2">
+                                            <p class="text-[7px] uppercase tracking-widest text-white">The Second Rebellion</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex flex-col">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#292524]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#292524] dark:bg-[#b02a2a]/25 dark:text-[#f08a8a]">
+                                            <i class="fa-solid fa-fire-flame-simple"></i> The Second Rebellion
+                                        </span>
+                                        <span class="rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]">Published 2010</span>
+                                        <span class="inline-flex items-center gap-1 rounded-full border border-[#e2d8c3] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:border-[#3b342c] dark:text-[#b0a48f]"><i class="fa-regular fa-clock text-[9px]"></i> The final chapter</span>
+                                    </div>
+                                    <h3 class="mt-3 text-2xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] sm:text-3xl">Mockingjay</h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                        War sweeps across Panem. Katniss must weigh what she is willing to sacrifice to end the Capitol&rsquo;s rule &mdash; and what kind of world should be allowed to rise from the ashes.
+                                    </p>
+                                    <div class="mt-4 flex flex-wrap gap-1.5">
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">War</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Sacrifice</span>
+                                        <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Aftermath</span>
+                                    </div>
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                        <span class="text-xs font-semibold text-[#57534e] dark:text-[#b0a48f]"><i class="fa-regular fa-user mr-1 text-[#b45309] dark:text-[#e7b04a]"></i> Katniss Everdeen</span>
+                                        <span class="text-[11px] text-[#b45309] dark:text-[#e7b04a]">Book <span class="order-index">05</span> of 5 in this order</span>
+                                    </div>
+                                    <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ SERIES 02 · THE UNDERLAND CHRONICLES ════════════════════════ -->
+        <section id="underland" class="scroll-mt-24 py-20 bg-[#fcfaf2] dark:bg-[#12100e]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#b45309] dark:text-[#e7b04a]">
+                        <span class="h-px w-6 bg-current"></span> Series 02 &middot; Fantasy
+                    </div>
+                    <h2 class="mt-3 text-3xl sm:text-5xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">The Underland Chronicles</h2>
+                    <p class="mt-4 text-sm sm:text-base leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                        Five books, one continuous descent. Gregor&rsquo;s journey beneath New York City unfolds in a single straight line, so the list below is both the reading order and the story order.
+                    </p>
+                    <div class="mt-5 inline-flex items-center gap-2 rounded-full border border-[#b45309]/30 bg-[#b45309]/5 px-4 py-2 text-xs font-semibold text-[#b45309] dark:border-[#e7b04a]/30 dark:bg-[#e7b04a]/5 dark:text-[#e7b04a]">
+                        <i class="fa-solid fa-arrow-down-1-9"></i> Publication order and story order match
+                    </div>
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <!-- Book 01 -->
+                    <article class="group flex flex-col overflow-hidden rounded-2xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <div class="relative flex h-28 items-end justify-between overflow-hidden bg-gradient-to-br from-[#3f3f2e] via-[#57534e] to-[#1c1917] p-4">
+                            <div class="pointer-events-none absolute -right-5 -top-8 h-24 w-24 rounded-full border border-white/10"></div>
+                            <span class="rounded-full bg-black/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Book 01</span>
+                            <i class="fa-solid fa-dungeon text-2xl text-amber-200/80"></i>
+                        </div>
+                        <div class="flex flex-1 flex-col p-5">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[#b45309] dark:text-[#e7b04a]">2003</p>
+                            <h3 class="mt-1 font-serif text-lg font-bold text-[#0f172a] dark:text-[#f1e7d4]">Gregor the Overlander</h3>
+                            <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">Gregor follows his little sister Boots through a laundry-room grate and falls into the Underland &mdash; a world beneath New York where humans live beside giant bats, cockroaches, and rats. A prophecy names him the warrior who may end a war.</p>
+                            <div class="mt-auto flex flex-wrap gap-1.5 pt-4">
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Fall</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Prophecy of Gray</span>
+                            </div>
+                            <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- Book 02 -->
+                    <article class="group flex flex-col overflow-hidden rounded-2xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <div class="relative flex h-28 items-end justify-between overflow-hidden bg-gradient-to-br from-[#334155] via-[#475569] to-[#0f172a] p-4">
+                            <div class="pointer-events-none absolute -right-5 -top-8 h-24 w-24 rounded-full border border-white/10"></div>
+                            <span class="rounded-full bg-black/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Book 02</span>
+                            <i class="fa-solid fa-paw text-2xl text-slate-200/80"></i>
+                        </div>
+                        <div class="flex flex-1 flex-col p-5">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[#b45309] dark:text-[#e7b04a]">2004</p>
+                            <h3 class="mt-1 font-serif text-lg font-bold text-[#0f172a] dark:text-[#f1e7d4]">Gregor and the Prophecy of Bane</h3>
+                            <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">Gregor returns to the Underland to rescue Boots from the rats &mdash; and comes face to face with the Bane, a white rat whose existence is tied to a dark prophecy.</p>
+                            <div class="mt-auto flex flex-wrap gap-1.5 pt-4">
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Bane</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Rescue</span>
+                            </div>
+                            <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- Book 03 -->
+                    <article class="group flex flex-col overflow-hidden rounded-2xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <div class="relative flex h-28 items-end justify-between overflow-hidden bg-gradient-to-br from-[#14532d] via-[#166534] to-[#052e16] p-4">
+                            <div class="pointer-events-none absolute -right-5 -top-8 h-24 w-24 rounded-full border border-white/10"></div>
+                            <span class="rounded-full bg-black/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Book 03</span>
+                            <i class="fa-solid fa-virus text-2xl text-emerald-200/80"></i>
+                        </div>
+                        <div class="flex flex-1 flex-col p-5">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[#b45309] dark:text-[#e7b04a]">2005</p>
+                            <h3 class="mt-1 font-serif text-lg font-bold text-[#0f172a] dark:text-[#f1e7d4]">Gregor and the Curse of the Warmbloods</h3>
+                            <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">A deadly plague spreads through the Underland. Gregor joins the desperate quest for a cure before the sickness reaches everyone he loves.</p>
+                            <div class="mt-auto flex flex-wrap gap-1.5 pt-4">
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Plague</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Cure</span>
+                            </div>
+                            <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- Book 04 -->
+                    <article class="group flex flex-col overflow-hidden rounded-2xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <div class="relative flex h-28 items-end justify-between overflow-hidden bg-gradient-to-br from-[#78350f] via-[#92400e] to-[#451a03] p-4">
+                            <div class="pointer-events-none absolute -right-5 -top-8 h-24 w-24 rounded-full border border-white/10"></div>
+                            <span class="rounded-full bg-black/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Book 04</span>
+                            <i class="fa-solid fa-scroll text-2xl text-amber-200/80"></i>
+                        </div>
+                        <div class="flex flex-1 flex-col p-5">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[#b45309] dark:text-[#e7b04a]">2006</p>
+                            <h3 class="mt-1 font-serif text-lg font-bold text-[#0f172a] dark:text-[#f1e7d4]">Gregor and the Marks of Secret</h3>
+                            <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">When Gregor discovers a trail of secret markings, he uncovers a threat that could shatter the fragile peace of the Underland.</p>
+                            <div class="mt-auto flex flex-wrap gap-1.5 pt-4">
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Secrets</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Peace</span>
+                            </div>
+                            <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- Book 05 -->
+                    <article class="group flex flex-col overflow-hidden rounded-2xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <div class="relative flex h-28 items-end justify-between overflow-hidden bg-gradient-to-br from-[#7f1d1d] via-[#991b1b] to-[#450a0a] p-4">
+                            <div class="pointer-events-none absolute -right-5 -top-8 h-24 w-24 rounded-full border border-white/10"></div>
+                            <span class="rounded-full bg-black/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Book 05</span>
+                            <i class="fa-solid fa-shield-halved text-2xl text-red-200/80"></i>
+                        </div>
+                        <div class="flex flex-1 flex-col p-5">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[#b45309] dark:text-[#e7b04a]">2007</p>
+                            <h3 class="mt-1 font-serif text-lg font-bold text-[#0f172a] dark:text-[#f1e7d4]">Gregor and the Code of Claw</h3>
+                            <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">The Prophecy of Time points toward a final war. Gregor must decide what he is willing to become to save the Underland &mdash; and whether he can ever go home again.</p>
+                            <div class="mt-auto flex flex-wrap gap-1.5 pt-4">
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">The Final War</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Prophecy of Time</span>
+                            </div>
+                            <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- Series note -->
+                    <article class="flex flex-col justify-between rounded-2xl border border-dashed border-[#b45309]/40 bg-gradient-to-br from-[#f4ede0] to-[#fcfaf2] p-5 dark:border-[#e7b04a]/30 dark:from-[#191613] dark:to-[#12100e]">
+                        <div>
+                            <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#92400e] dark:text-[#e7b04a]">
+                                <i class="fa-solid fa-layer-group"></i> Series note
+                            </div>
+                            <h3 class="mt-3 font-serif text-xl font-bold text-[#0f172a] dark:text-[#f1e7d4]">One continuous descent</h3>
+                            <p class="mt-2 text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                Unlike Panem, the Underland books run in a single straight line. The order above is both the story order and the publication order &mdash; no switch required.
+                            </p>
+                        </div>
+                        <div class="mt-5 grid grid-cols-2 gap-2 text-center">
+                            <div class="rounded-xl border border-[#e2d8c3] bg-white/60 p-3 dark:border-[#3b342c] dark:bg-[#211d19]/60">
+                                <p class="font-serif text-xl font-bold text-[#b45309] dark:text-[#e7b04a]">5</p>
+                                <p class="text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">Books</p>
+                            </div>
+                            <div class="rounded-xl border border-[#e2d8c3] bg-white/60 p-3 dark:border-[#3b342c] dark:bg-[#211d19]/60">
+                                <p class="font-serif text-lg font-bold text-[#b45309] dark:text-[#e7b04a]">2003&ndash;07</p>
+                                <p class="text-[10px] font-semibold uppercase tracking-wider text-[#57534e] dark:text-[#b0a48f]">Years</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ SERIES 03 · PICTURE BOOKS & STANDALONES ══════════════════════ -->
+        <section id="standalones" class="scroll-mt-24 py-20 bg-[#f4ede0] border-y border-[#e2d8c3] dark:bg-[#191613] dark:border-[#3b342c]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#7c2d12] dark:text-[#f08a8a]">
+                        <span class="h-px w-6 bg-current"></span> Series 03 &middot; Illustrated &amp; Standalone <span class="h-px w-6 bg-current"></span>
+                    </div>
+                    <h2 class="mt-3 text-3xl sm:text-5xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">Beyond Panem</h2>
+                    <p class="mt-4 text-sm sm:text-base leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                        Two illustrated works that step outside the timelines of Panem and the Underland. Listed by publication year, they are smaller stories about family, fear, and the imaginative life of children.
+                    </p>
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <!-- When Charlie McButton Lost Power -->
+                    <article class="group overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <div class="relative flex h-44 items-center justify-between overflow-hidden bg-gradient-to-br from-[#78350f] via-[#b45309] to-[#451a03] px-7">
+                            <div class="pointer-events-none absolute -right-8 -top-12 h-36 w-36 rounded-full border border-white/10"></div>
+                            <div class="pointer-events-none absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-white/5"></div>
+                            <div class="relative">
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-amber-100">Picture Book &middot; 2005</p>
+                                <p class="mt-2 max-w-xs font-serif text-2xl font-bold leading-tight text-white sm:text-3xl">When Charlie McButton Lost Power</p>
+                                <p class="mt-1 text-[11px] text-white">Illustrated by Mike Lester</p>
+                            </div>
+                            <i class="fa-solid fa-bolt relative text-4xl text-amber-200/70"></i>
+                        </div>
+                        <div class="p-6 sm:p-7">
+                            <p class="text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                Charlie McButton&rsquo;s world runs on screens &mdash; until a storm knocks out the power. A playful rhyming story about boredom, imagination, and rediscovering the people right beside you.
+                            </p>
+                            <div class="mt-5 flex flex-wrap gap-1.5">
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Imagination</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Siblings</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Screen time</span>
+                            </div>
+                            <div class="mt-5 flex items-center justify-between border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                <span class="text-[11px] font-semibold uppercase tracking-wider text-[#7c2d12] dark:text-[#f08a8a]">Ages 4&ndash;8</span>
+                                <span class="text-xs text-[#57534e] dark:text-[#b0a48f]"><i class="fa-solid fa-book-open mr-1 text-[#b45309] dark:text-[#e7b04a]"></i> Picture book</span>
+                            </div>
+                            <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- Year of the Jungle -->
+                    <article class="group overflow-hidden rounded-3xl border border-[#e2d8c3] bg-white shadow-sm transition-colors duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-[#3b342c] dark:bg-[#211d19]">
+                        <div class="relative flex h-44 items-center justify-between overflow-hidden bg-gradient-to-br from-[#3f6212] via-[#4d7c0f] to-[#1a2e05] px-7">
+                            <div class="pointer-events-none absolute -right-8 -top-12 h-36 w-36 rounded-full border border-white/10"></div>
+                            <div class="pointer-events-none absolute -bottom-16 -left-10 h-40 w-40 rounded-full bg-white/5"></div>
+                            <div class="relative">
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-lime-100">Picture Book &middot; 2013</p>
+                                <p class="mt-2 font-serif text-2xl font-bold text-white sm:text-3xl">Year of the Jungle</p>
+                                <p class="mt-1 text-[11px] text-white">Illustrated by James Proimos</p>
+                            </div>
+                            <i class="fa-solid fa-plane relative text-4xl text-lime-200/70"></i>
+                        </div>
+                        <div class="p-6 sm:p-7">
+                            <p class="text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                                Inspired by Suzanne Collins&rsquo;s own childhood, this gentle picture book follows a young girl through the year her father is deployed to Vietnam &mdash; a story about worry, wonder, and the letters that connect a family across the world.
+                            </p>
+                            <div class="mt-5 flex flex-wrap gap-1.5">
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Family</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Deployment</span>
+                                <span class="rounded-full bg-[#f4ede0] px-2.5 py-1 text-[10px] font-semibold text-[#57534e] dark:bg-[#12100e] dark:text-[#b0a48f]">Memory</span>
+                            </div>
+                            <div class="mt-5 flex items-center justify-between border-t border-[#e2d8c3] pt-4 dark:border-[#3b342c]">
+                                <span class="text-[11px] font-semibold uppercase tracking-wider text-[#7c2d12] dark:text-[#f08a8a]">Ages 4&ndash;8</span>
+                                <span class="text-xs text-[#57534e] dark:text-[#b0a48f]"><i class="fa-solid fa-book-open mr-1 text-[#b45309] dark:text-[#e7b04a]"></i> Picture book</span>
+                            </div>
+                            <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center justify-center gap-2 w-full rounded-full bg-[#064e3b] px-4 py-2.5 text-sm font-semibold text-[#fcfaf2] transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">Learn more <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="mt-10 flex items-start gap-4 rounded-2xl border border-[#e2d8c3] bg-white/70 p-6 dark:border-[#3b342c] dark:bg-[#211d19]/70">
+                    <i class="fa-solid fa-quote-left mt-1 text-lg text-[#b45309] dark:text-[#e7b04a]"></i>
+                    <p class="font-serif text-sm italic leading-relaxed text-[#57534e] dark:text-[#cbbfa9] sm:text-base">
+                        Both books sit outside the timelines of Panem and the Underland &mdash; and yet they return to the same question that runs through all of Collins&rsquo;s work: what do we owe one another?
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ── FOOTER ───────────────────────────────────────────────────────── -->
+    <footer id="site-footer" class="bg-[#fcfaf2] border-t border-[#e2d8c3] dark:bg-[#12100e] dark:border-[#3b342c]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Links & social -->
+            <div class="flex flex-col gap-8 border-b border-[#e2d8c3] py-10 dark:border-[#3b342c] md:flex-row md:items-center md:justify-between">
+                <div>
+                    <a href="index.html" class="font-serif tracking-widest text-lg font-bold uppercase text-[#292524] hover:text-[#064e3b] dark:text-[#ece2cf] dark:hover:text-[#f4ca72] transition-colors">Suzanne Collins</a>
+                    <p class="mt-1 text-xs sm:text-sm text-[#57534e] dark:text-[#b0a48f]">Literary works and chronicles.</p>
+                </div>
+                <nav class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold">
+                    <a href="index.html" class="text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Home</a>
+                    <a href="map.html" class="text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Map of Panem</a>
+                    <a href="collections.html" class="text-[#064e3b] dark:text-[#e7b04a]">Collections</a>
+                    <a href="biography.html" class="transition-link text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Biography</a>
+                    <a href="viewing-guide.html" class="text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Viewing Guide</a>
+                </nav>
+                <div class="flex items-center gap-3">
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="X">
+                        <i class="fa-brands fa-x-twitter text-sm"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram text-sm"></i>
+                    </a>
+                    <a href="https://goodreads.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Goodreads">
+                        <i class="fa-brands fa-goodreads-g text-sm"></i>
+                    </a>
+                    <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Official Website">
+                        <i class="fa-solid fa-globe text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="flex flex-col items-center justify-between gap-3 py-8 text-xs text-[#57534e] dark:text-[#b0a48f] sm:flex-row">
+                <p>&copy; 2026 Suzanne Collins. All rights reserved. Original reference: <a href="https://www.suzannecollinsbooks.com" class="font-medium text-[#7c2d12] hover:underline dark:text-[#f08a8a]">suzannecollinsbooks.com</a>.</p>
+                <p>Designed with Semantic HTML5 &amp; Tailwind CSS.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to top -->
+    <button id="to-top" class="fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-[#e2d8c3] bg-white/95 text-[#064e3b] shadow-lg backdrop-blur-sm transition-colors duration-300 hover:bg-[#f4ede0] opacity-0 pointer-events-none translate-y-2 dark:border-[#3b342c] dark:bg-[#211d19]/95 dark:text-[#e7b04a] dark:hover:bg-[#2c2721]" aria-label="Back to top">
+        <i class="fa-solid fa-arrow-up text-sm"></i>
+    </button>
+
+    <script>
+        /* ── Dark / light mode ────────────────────────────────────────── */
+        const html = document.documentElement;
+        const themeButtons = document.querySelectorAll('.theme-toggle');
+
+        function applyTheme(dark) {
+            html.classList.toggle('dark', dark);
+            html.style.colorScheme = dark ? 'dark' : 'light';
+            themeButtons.forEach((btn) => {
+                btn.innerHTML = dark
+                    ? '<i class="fa-solid fa-sun text-sm"></i>'
+                    : '<i class="fa-solid fa-moon text-sm"></i>';
+                btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+                btn.setAttribute('title', dark ? 'Switch to light mode' : 'Switch to dark mode');
+            });
+        }
+
+        const stored = localStorage.getItem('sc-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(stored ? stored === 'dark' : prefersDark);
+
+        themeButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const isDark = !html.classList.contains('dark');
+                applyTheme(isDark);
+                localStorage.setItem('sc-theme', isDark ? 'dark' : 'light');
+            });
+        });
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'sc-theme') applyTheme(e.newValue === 'dark');
+        });
+
+        /* ── Mobile menu ──────────────────────────────────────────────── */
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.toggle('hidden');
+                menuBtn.setAttribute('aria-expanded', String(!isHidden));
+            });
+            mobileMenu.querySelectorAll('a').forEach((link) => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+
+        /* ── Hunger Games reading order toggle ────────────────────────── */
+        const orderButtons = document.querySelectorAll('.order-btn');
+        const hgList = document.getElementById('hg-list');
+        const orderNote = document.getElementById('order-note');
+        const hgEntries = hgList ? Array.from(hgList.querySelectorAll('.hg-entry')) : [];
+
+        const activeClasses = ['bg-[#064e3b]', 'text-[#fcfaf2]', 'shadow-sm', 'dark:bg-[#b02a2a]', 'dark:text-[#f6efdf]'];
+        const inactiveClasses = ['text-[#57534e]', 'hover:text-[#064e3b]', 'dark:text-[#b0a48f]', 'dark:hover:text-[#f4ca72]'];
+
+        function setOrder(mode) {
+            if (!hgList) return;
+
+            const sorted = [...hgEntries].sort(
+                (a, b) => Number(a.dataset[mode]) - Number(b.dataset[mode])
+            );
+
+            sorted.forEach((entry) => {
+                entry.style.opacity = '0';
+                entry.style.transform = 'translateY(10px)';
+            });
+
+            requestAnimationFrame(() => {
+                sorted.forEach((entry, index) => {
+                    hgList.appendChild(entry);
+                    entry.querySelectorAll('.order-index').forEach((node) => {
+                        node.textContent = String(index + 1).padStart(2, '0');
+                    });
+                });
+
+                requestAnimationFrame(() => {
+                    sorted.forEach((entry) => {
+                        entry.style.opacity = '';
+                        entry.style.transform = '';
+                    });
+                });
+            });
+
+            orderNote.innerHTML = mode === 'chronology'
+                ? '<strong class="font-semibold text-[#064e3b] dark:text-[#e7b04a]">In-world chronology:</strong> the saga as it happens &mdash; from the 10th Hunger Games to the Second Rebellion.'
+                : '<strong class="font-semibold text-[#064e3b] dark:text-[#e7b04a]">Publication order:</strong> the saga as readers first met it &mdash; The Hunger Games (2008) through Sunrise on the Reaping (2025).';
+
+            orderButtons.forEach((btn) => {
+                const isActive = btn.dataset.order === mode;
+                btn.setAttribute('aria-pressed', String(isActive));
+                activeClasses.forEach((cls) => btn.classList.toggle(cls, isActive));
+                inactiveClasses.forEach((cls) => btn.classList.toggle(cls, !isActive));
+            });
+        }
+
+        orderButtons.forEach((btn) => {
+            btn.addEventListener('click', () => setOrder(btn.dataset.order));
+        });
+
+        /* ── Back to top ──────────────────────────────────────────────── */
+        const toTop = document.getElementById('to-top');
+
+        function toggleToTop() {
+            if (!toTop) return;
+            const visible = window.scrollY > 500;
+            toTop.classList.toggle('opacity-0', !visible);
+            toTop.classList.toggle('pointer-events-none', !visible);
+            toTop.classList.toggle('translate-y-2', !visible);
+        }
+
+        if (toTop) {
+            window.addEventListener('scroll', toggleToTop, { passive: true });
+            toggleToTop();
+            toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        }
+
+        /* ── Smooth page transitions ──────────────────────────────────── */
+        document.querySelectorAll('a.transition-link').forEach((link) => {
+            link.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#')) return;
+
+                e.preventDefault();
+                document.body.classList.add('page-slide-out-right');
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 260);
+            });
+        });
+    </script>
+
+</body>
+</html>

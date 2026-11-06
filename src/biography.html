@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Biography | Suzanne Collins Official Author Website</title>
+    <!-- Apply the saved theme before first paint so dark mode never flashes light -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('sc-theme');
+                var dark = saved ? saved === 'dark'
+                                 : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark', dark);
+                document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+            } catch (e) { /* ignore private-mode storage errors */ }
+        })();
+    </script>
+    <meta name="view-transition" content="same-origin">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        academia: {
+                            parchment: '#fcfaf2',
+                            cream:     '#f4ede0',
+                            border:    '#e2d8c3',
+                            burgundy:  '#7c2d12',
+                            gold:      '#b45309',
+                            ink:       '#292524',
+                            muted:     '#57534e'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Georgia', 'Cambria', 'Baskerville', 'Times New Roman', 'serif'],
+                        sans:  ['system-ui', '-apple-system', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        #scroll-canvas { height: calc(5 * 100vh); }
+
+        #fixed-stage {
+            position: fixed;
+            inset: 0;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        #fixed-stage.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .chapter-panel {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            padding-bottom: 24px;
+            opacity: 0;
+            transform: translateY(48px);
+            transition: opacity 0.55s cubic-bezier(0.16,1,0.3,1),
+                        transform 0.55s cubic-bezier(0.16,1,0.3,1);
+            pointer-events: none;
+        }
+        .chapter-panel.is-active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .chapter-panel.is-exiting {
+            opacity: 0;
+            transform: translateY(-48px);
+            transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+            pointer-events: none;
+        }
+
+        /* Dot tooltip bubble */
+        .dot-wrap { position: relative; }
+        .dot-tooltip {
+            position: absolute;
+            right: calc(100% + 14px);
+            top: 50%;
+            transform: translateY(-50%) scale(0.9);
+            white-space: nowrap;
+            background: #292524;
+            color: #fcfaf2;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .dot-tooltip::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 6px solid #292524;
+        }
+        .dot-wrap:hover .dot-tooltip {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+
+        @keyframes bounceDown {
+            0%,60%,100% { transform: translateY(0); }
+            30%          { transform: translateY(8px); }
+        }
+        .bounce { animation: bounceDown 1.8s infinite; }
+            @media (prefers-reduced-motion: reduce) { body { animation: none; } .page-slide-out-right { transition: none; } }
+    </style>
+</head>
+<body class="bg-[#fcfaf2] dark:bg-[#12100e] text-[#292524] dark:text-[#f1e7d4] font-sans antialiased selection:bg-[#7c2d12] selection:text-[#fcfaf2] transition-colors duration-300 dark:selection:bg-[#b02a2a] dark:selection:text-[#f6efdf]">
+
+    <!-- ── FIXED HEADER ─────────────────────────────────────────────────── -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-[#fcfaf2]/90 dark:bg-[#12100e]/90 backdrop-blur-md border-b border-[#e2d8c3] dark:border-[#3b342c] transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <a href="index.html" class="group flex items-center gap-2 py-2">
+                    <span class="font-serif tracking-widest text-2xl font-bold uppercase text-[#0f172a] dark:text-[#f1e7d4] group-hover:text-[#064e3b] dark:group-hover:text-[#f4ca72] transition-colors">SC</span>
+                    <span class="hidden sm:inline text-xs font-serif italic text-[#57534e] dark:text-[#b0a48f]">&bull; Author Biography</span>
+                </a>
+                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+                    <a href="index.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Home</a>
+                    <a href="map.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Map of Panem</a>
+                    <a href="collections.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Collections</a>
+                    <a href="biography.html" aria-current="page" class="text-[#064e3b] dark:text-[#e7b04a] transition-colors">Biography</a>
+                    <a href="viewing-guide.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Viewing Guide</a>
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors shadow-xs" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                </nav>
+
+                <!-- Mobile controls -->
+                <div class="flex items-center gap-2 md:hidden">
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="p-2 text-[#0f172a] hover:text-[#064e3b] dark:text-[#f1e7d4] dark:hover:text-[#f4ca72] transition-colors" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-menu">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-3 pb-5 space-y-1 bg-[#fcfaf2]/95 backdrop-blur-md border-b border-[#e2d8c3] shadow-md dark:bg-[#12100e]/95 dark:border-[#3b342c]">
+            <a href="index.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Home</a>
+            <a href="map.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Map of Panem</a>
+            <a href="collections.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Collections</a>
+            <a href="biography.html" aria-current="page" class="block rounded-lg px-3 py-2 bg-[#064e3b]/10 text-[#064e3b] font-semibold dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">Biography</a>
+            <a href="viewing-guide.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Viewing Guide</a>
+        </div>
+    </header>
+
+    <!-- ── FLOATING DOT NAV ──────────────────────────────────────────────── -->
+    <aside id="dot-nav"
+           class="fixed right-5 sm:right-8 top-1/2 -translate-y-1/2 z-40
+                  flex flex-col items-center gap-4
+                  bg-white/80 dark:bg-[#211d19]/80 backdrop-blur-sm px-3 py-4 rounded-full
+                  border border-[#e2d8c3] dark:border-[#3b342c] shadow-md
+                  opacity-0 pointer-events-none transition-opacity duration-300">
+        <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-[#57534e] dark:text-[#b0a48f] text-center">Chapters<br>tap to jump</p>
+        <div class="dot-wrap flex items-center">
+            <div class="dot-tooltip">01 · The Beginnings</div>
+            <button onclick="jumpToSlide(0)" class="nav-dot w-4 h-4 p-1.5 bg-clip-content rounded-full bg-[#064e3b] border-2 border-white dark:border-[#211d19] shadow transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#064e3b] dark:focus-visible:ring-[#e7b04a] dark:bg-[#b02a2a]" aria-label="Chapter 1"></button>
+        </div>
+        <div class="dot-wrap flex items-center">
+            <div class="dot-tooltip">02 · Television Career</div>
+            <button onclick="jumpToSlide(1)" class="nav-dot w-3 h-3 p-1.5 bg-clip-content rounded-full bg-[#d1c9b8] dark:bg-[#4a4238] border-2 border-white dark:border-[#211d19] shadow transition-colors duration-300 hover:bg-[#7c2d12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#064e3b] dark:focus-visible:ring-[#e7b04a] dark:hover:bg-[#8c1f22]" aria-label="Chapter 2"></button>
+        </div>
+        <div class="dot-wrap flex items-center">
+            <div class="dot-tooltip">03 · Underland Chronicles</div>
+            <button onclick="jumpToSlide(2)" class="nav-dot w-3 h-3 p-1.5 bg-clip-content rounded-full bg-[#d1c9b8] dark:bg-[#4a4238] border-2 border-white dark:border-[#211d19] shadow transition-colors duration-300 hover:bg-[#b45309] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#064e3b] dark:focus-visible:ring-[#e7b04a] dark:hover:bg-[#8a5a12]" aria-label="Chapter 3"></button>
+        </div>
+        <div class="dot-wrap flex items-center">
+            <div class="dot-tooltip">04 · The Hunger Games</div>
+            <button onclick="jumpToSlide(3)" class="nav-dot w-3 h-3 p-1.5 bg-clip-content rounded-full bg-[#d1c9b8] dark:bg-[#4a4238] border-2 border-white dark:border-[#211d19] shadow transition-colors duration-300 hover:bg-[#064e3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#064e3b] dark:focus-visible:ring-[#e7b04a] dark:hover:bg-[#8c1f22]" aria-label="Chapter 4"></button>
+        </div>
+        <div class="dot-wrap flex items-center">
+            <div class="dot-tooltip">05 · Finale & Legacy</div>
+            <button onclick="jumpToSlide(4)" class="nav-dot w-3 h-3 p-1.5 bg-clip-content rounded-full bg-[#d1c9b8] dark:bg-[#4a4238] border-2 border-white dark:border-[#211d19] shadow transition-colors duration-300 hover:bg-[#0f172a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#064e3b] dark:focus-visible:ring-[#e7b04a] dark:hover:bg-[#3b342c]" aria-label="Chapter 5"></button>
+        </div>
+        <span id="page-counter" class="text-[10px] font-mono font-bold text-[#57534e] dark:text-[#b0a48f] pt-2 border-t border-[#e2d8c3] dark:border-[#3b342c] w-full text-center leading-tight">1 / 5</span>
+        <span id="dot-chapter" class="text-[9px] font-semibold text-[#b45309] dark:text-[#e7b04a] w-full text-center leading-tight max-w-[72px]">01 · The Beginnings</span>
+    </aside>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         STATIC INTRO
+         ════════════════════════════════════════════════════════════════════ -->
+    <section id="static-intro"
+             class="relative min-h-screen flex items-center pt-20 pb-16
+                    bg-gradient-to-b from-[#f4ede0] via-[#fcfaf2] to-[#fcfaf2]
+                    dark:from-[#191613] dark:via-[#12100e] dark:to-[#12100e]
+                    border-b border-[#e2d8c3] dark:border-[#3b342c]
+                    transition-colors duration-300">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 items-center">
+                <!-- Portrait -->
+                <div class="md:col-span-4 flex flex-col items-center">
+                    <div class="w-48 h-60 sm:w-60 sm:h-72 rounded-3xl overflow-hidden border-2 border-[#064e3b]/30 dark:border-[#e7b04a]/25 shadow-2xl bg-white dark:bg-[#211d19] p-2">
+                        <img src="assets/image/suzanne-collins.jpg" alt="Suzanne Collins" class="w-full h-full object-cover object-top rounded-2xl">
+                    </div>
+                    <p class="mt-3 text-sm font-serif font-semibold text-[#0f172a] dark:text-[#f1e7d4]">Suzanne Collins</p>
+                    <span class="text-xs text-[#b45309] dark:text-[#e7b04a] font-medium">American Novelist &amp; Screenwriter</span>
+                </div>
+
+                <!-- Intro text -->
+                <div class="md:col-span-8 space-y-6">
+                    <span class="text-xs uppercase tracking-widest font-semibold text-[#064e3b] dark:text-[#e7b04a]">Autobiographical Journey</span>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] leading-tight">
+                        The Life of<br>Suzanne Collins
+                    </h1>
+                    <p class="text-[#57534e] dark:text-[#b0a48f] text-base sm:text-lg leading-relaxed max-w-xl">
+                        From a childhood shaped by military history and questions of war, through television screenwriting and debut fiction, to the worldwide phenomenon of <em>The Hunger Games</em> — five chapters that tell the full story.
+                    </p>
+                    <ul class="space-y-2 pt-1">
+                        <li class="flex items-center gap-3 text-sm text-[#57534e] dark:text-[#b0a48f]"><span class="w-5 h-5 rounded-full bg-[#064e3b]/10 dark:bg-[#b02a2a]/20 text-[#064e3b] dark:text-[#e7b04a] text-[10px] font-bold flex items-center justify-center shrink-0">1</span>The Beginnings &amp; Moral Inquiry</li>
+                        <li class="flex items-center gap-3 text-sm text-[#57534e] dark:text-[#b0a48f]"><span class="w-5 h-5 rounded-full bg-[#7c2d12]/10 dark:bg-[#b02a2a]/20 text-[#7c2d12] dark:text-[#f08a8a] text-[10px] font-bold flex items-center justify-center shrink-0">2</span>Children's Television Writing</li>
+                        <li class="flex items-center gap-3 text-sm text-[#57534e] dark:text-[#b0a48f]"><span class="w-5 h-5 rounded-full bg-[#b45309]/10 dark:bg-[#e7b04a]/20 text-[#92400e] dark:text-[#e7b04a] text-[10px] font-bold flex items-center justify-center shrink-0">3</span>The Underland Chronicles</li>
+                        <li class="flex items-center gap-3 text-sm text-[#57534e] dark:text-[#b0a48f]"><span class="w-5 h-5 rounded-full bg-[#064e3b]/10 dark:bg-[#b02a2a]/20 text-[#064e3b] dark:text-[#e7b04a] text-[10px] font-bold flex items-center justify-center shrink-0">4</span>The Hunger Games Phenomenon</li>
+                        <li class="flex items-center gap-3 text-sm text-[#57534e] dark:text-[#b0a48f]"><span class="w-5 h-5 rounded-full bg-[#0f172a]/10 dark:bg-[#f1e7d4]/10 text-[#0f172a] dark:text-[#f1e7d4] text-[10px] font-bold flex items-center justify-center shrink-0">5</span>The Finale &amp; Enduring Legacy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-14 text-center">
+                <p class="text-xs font-semibold text-[#064e3b] dark:text-[#e7b04a] uppercase tracking-widest mb-2">Scroll to begin her story</p>
+                <i class="fa-solid fa-arrow-down text-[#064e3b] dark:text-[#e7b04a] text-base bounce"></i>
+            </div>
+        </div>
+    </section>
+
+    <div id="scroll-canvas"></div>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         FIXED STAGE
+         ════════════════════════════════════════════════════════════════════ -->
+    <div id="fixed-stage">
+
+        <!-- CH 1 -->
+        <div class="chapter-panel is-active bg-gradient-to-b from-[#f4ede0] via-[#fcfaf2] to-[#f4ede0]/40 dark:from-[#191613] dark:via-[#12100e] dark:to-[#12100e] transition-colors duration-300">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="max-w-2xl space-y-5">
+                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#064e3b] dark:text-[#e7b04a]">
+                        <span class="w-5 h-px bg-[#064e3b] dark:bg-[#e7b04a]"></span>
+                        Chapter 01 &bull; 1962 – 1989
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] leading-tight">The Beginnings &amp; Moral Inquiry</h2>
+                    <div class="text-[#57534e] dark:text-[#cbbfa9] text-sm sm:text-base leading-relaxed space-y-3">
+                        <p>Suzanne Collins was born on August 10, 1962, in Hartford, Connecticut — the youngest of four children and the daughter of a U.S. Air Force officer and Vietnam veteran who held a doctorate in political science.</p>
+                        <p>Her father regularly held open conversations with his children about the history and ethics of war, planting a deep fascination with <strong>Just War theory</strong> and the human cost of conflict that would define her literary voice.</p>
+                        <p>She graduated from the Alabama School of Fine Arts (1980), earned a B.A. from Indiana University (1985), and completed her M.F.A. in Dramatic Writing from NYU's Tisch School of the Arts in 1989.</p>
+                    </div>
+                    <blockquote class="border-l-4 border-[#064e3b]/40 dark:border-[#e7b04a]/30 pl-4 italic text-[#57534e] dark:text-[#b0a48f] text-sm leading-relaxed">
+                        "When I was young, my father made sure we understood the cost of war — not just in battles won or lost, but in lives irreversibly altered."
+                        <span class="block not-italic text-xs font-semibold text-[#b45309] dark:text-[#e7b04a] mt-1.5">— On her father's influence</span>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <!-- CH 2 -->
+        <div class="chapter-panel bg-white dark:bg-[#12100e] transition-colors duration-300">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="max-w-2xl space-y-5">
+                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#7c2d12] dark:text-[#f08a8a]">
+                        <span class="w-5 h-px bg-[#7c2d12] dark:bg-[#f08a8a]"></span>
+                        Chapter 02 &bull; 1991 – 2002
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] leading-tight">Crafting Stories for Young Minds</h2>
+                    <div class="text-[#57534e] dark:text-[#cbbfa9] text-sm sm:text-base leading-relaxed space-y-3">
+                        <p>Collins launched her writing career in 1991, scripting teleplays for Nickelodeon — contributing to <em>Clarissa Explains It All</em> and <em>The Mystery Files of Shelby Woo</em>.</p>
+                        <p>She later served as head writer on PBS's <em>Clifford's Puppy Days</em> and wrote for <em>Little Bear</em> and <em>Oswald</em>. A decade in children's television taught her the fundamentals of pacing, empathy, and sincere dialogue.</p>
+                        <p>While on Kids' WB's <em>Generation O!</em>, she met author-illustrator <strong>James Proimos</strong>, who challenged her to take her storytelling into books. She accepted.</p>
+                    </div>
+                    <blockquote class="border-l-4 border-[#7c2d12]/40 dark:border-[#f08a8a]/30 pl-4 italic text-[#57534e] dark:text-[#b0a48f] text-sm leading-relaxed">
+                        "Children can handle difficult truths if you treat them with respect. I never wanted to talk down to my audience."
+                        <span class="block not-italic text-xs font-semibold text-[#b45309] dark:text-[#e7b04a] mt-1.5">— On writing for young readers</span>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <!-- CH 3 -->
+        <div class="chapter-panel bg-gradient-to-b from-[#fcfaf2] to-[#f4ede0] dark:from-[#12100e] dark:to-[#191613] transition-colors duration-300">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="max-w-2xl space-y-5">
+                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#b45309] dark:text-[#e7b04a]">
+                        <span class="w-5 h-px bg-[#b45309] dark:bg-[#e7b04a]"></span>
+                        Chapter 03 &bull; 2003 – 2007
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] leading-tight">The Underland Chronicles</h2>
+                    <div class="text-[#57534e] dark:text-[#cbbfa9] text-sm sm:text-base leading-relaxed space-y-3">
+                        <p>In 2003, Collins published <em>Gregor the Overlander</em> — the first of five books in <em>The Underland Chronicles</em>. Inspired by <em>Alice in Wonderland</em>, she reimagined the fall: not down a country rabbit hole, but through a New York City apartment laundry grate into a hidden civilization beneath Manhattan.</p>
+                        <p>The series tackled biological warfare, military occupation, and moral ambiguity — proving definitively that children's fiction need not shy away from the hard questions of the world.</p>
+                    </div>
+                    <blockquote class="border-l-4 border-[#b45309]/40 dark:border-[#e7b04a]/30 pl-4 italic text-[#57534e] dark:text-[#b0a48f] text-sm leading-relaxed">
+                        "What if the wonder of Alice's underground was not escape — but confrontation with the world's darkest realities?"
+                        <span class="block not-italic text-xs font-semibold text-[#b45309] dark:text-[#e7b04a] mt-1.5">— On the genesis of Gregor the Overlander</span>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <!-- CH 4 -->
+        <div class="chapter-panel bg-white dark:bg-[#12100e] transition-colors duration-300">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="max-w-2xl space-y-5">
+                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#064e3b] dark:text-[#e7b04a]">
+                        <span class="w-5 h-px bg-[#064e3b] dark:bg-[#e7b04a]"></span>
+                        Chapter 04 &bull; 2008 – 2020
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] leading-tight">The Genesis of Panem &amp; Global Acclaim</h2>
+                    <div class="text-[#57534e] dark:text-[#cbbfa9] text-sm sm:text-base leading-relaxed space-y-3">
+                        <p>One evening, channel-surfing between a reality competition and war footage from Iraq, the boundary between entertainment and tragedy dissolved. That collision became Panem.</p>
+                        <p>Drawing on the myth of Theseus and Roman gladiatorial games, Collins created <strong>Katniss Everdeen</strong>. <em>The Hunger Games</em> (2008), followed by <em>Catching Fire</em> and <em>Mockingjay</em>, became an international phenomenon — translated into 54 languages and adapted into four blockbuster films she co-wrote.</p>
+                    </div>
+                    <blockquote class="border-l-4 border-[#064e3b]/40 dark:border-[#e7b04a]/30 pl-4 italic text-[#57534e] dark:text-[#b0a48f] text-sm leading-relaxed">
+                        "I was channel surfing and I kept flipping between reality television and footage from the war in Iraq — and the two began to fuse in a very unsettling way."
+                        <span class="block not-italic text-xs font-semibold text-[#b45309] dark:text-[#e7b04a] mt-1.5">— On the birth of The Hunger Games</span>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <!-- CH 5 -->
+        <div class="chapter-panel bg-gradient-to-b from-[#fcfaf2] via-[#f4ede0] to-[#fcfaf2] dark:from-[#12100e] dark:via-[#191613] dark:to-[#12100e] transition-colors duration-300">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="max-w-2xl space-y-5">
+                    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#0f172a] dark:text-[#f1e7d4]">
+                        <span class="w-5 h-px bg-[#0f172a] dark:bg-[#f1e7d4]"></span>
+                        Chapter 05 &bull; The Finale &amp; Present
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4] leading-tight">Philosophical Depth &amp; Enduring Legacy</h2>
+                    <div class="text-[#57534e] dark:text-[#cbbfa9] text-sm sm:text-base leading-relaxed space-y-3">
+                        <p>In 2020, Collins returned to Panem with <em>The Ballad of Songbirds and Snakes</em>, probing how authoritarianism takes root — a philosophical examination influenced by Hobbes and Locke.</p>
+                        <p>She also wrote <em>Year of the Jungle</em>, an autobiographical picture book offering comfort to children of deployed parents, drawn from her own experience as a first-grader when her father left for Vietnam.</p>
+                        <p>With <em>Sunrise on the Reaping</em> (March 18, 2025), Suzanne Collins endures as one of the most consequential literary voices of the modern era.</p>
+                    </div>
+                    <blockquote class="border-l-4 border-[#0f172a]/20 dark:border-[#f1e7d4]/20 pl-4 italic text-[#57534e] dark:text-[#b0a48f] text-sm leading-relaxed">
+                        "The questions I've always been asking are the same: What constitutes a just war? What is the price of safety? Who decides?"
+                        <span class="block not-italic text-xs font-semibold text-[#b45309] dark:text-[#e7b04a] mt-1.5">— On her lifelong literary themes</span>
+                    </blockquote>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a href="collections.html" class="px-5 py-2.5 rounded-full bg-[#064e3b] text-[#fcfaf2] hover:bg-[#022c22] font-semibold text-sm transition-colors shadow-sm inline-flex items-center gap-2 dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">
+                            <i class="fa-solid fa-book text-xs"></i> Browse Collections
+                        </a>
+                        <a href="index.html" class="px-5 py-2.5 rounded-full bg-white dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#0f172a] dark:text-[#f1e7d4] hover:bg-[#f4ede0] dark:hover:bg-[#2c2721] font-semibold text-sm transition-colors inline-flex items-center gap-2">
+                            <i class="fa-solid fa-house text-xs"></i> Return to Homepage
+                        </a>
+                        <button onclick="jumpToSlide(0)" class="px-4 py-2.5 rounded-full text-xs font-semibold text-[#57534e] dark:text-[#b0a48f] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors inline-flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrow-up text-xs"></i> Back to Top
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /fixed-stage -->
+
+    <script>
+        /* ── Dark / Light mode ────────────────────────────────────────── */
+        const html = document.documentElement;
+        const themeButtons = document.querySelectorAll('.theme-toggle');
+
+        function applyTheme(dark) {
+            html.classList.toggle('dark', dark);
+            html.style.colorScheme = dark ? 'dark' : 'light';
+            themeButtons.forEach((btn) => {
+                btn.innerHTML = dark
+                    ? '<i class="fa-solid fa-sun text-sm"></i>'
+                    : '<i class="fa-solid fa-moon text-sm"></i>';
+                btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+                btn.setAttribute('title', dark ? 'Switch to light mode' : 'Switch to dark mode');
+            });
+        }
+
+        const stored = localStorage.getItem('sc-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(stored ? stored === 'dark' : prefersDark);
+
+        themeButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const isDark = !html.classList.contains('dark');
+                applyTheme(isDark);
+                localStorage.setItem('sc-theme', isDark ? 'dark' : 'light');
+            });
+        });
+
+        // Keep the theme in sync if it is changed in another tab
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'sc-theme') applyTheme(e.newValue === 'dark');
+        });
+
+        /* ── Mobile menu toggle ───────────────────────────────────────── */
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.toggle('hidden');
+                menuBtn.setAttribute('aria-expanded', String(!isHidden));
+            });
+        }
+
+        /* ── Scroll / chapter logic ───────────────────────────────────── */
+        const TOTAL   = 5;
+        const stage   = document.getElementById('fixed-stage');
+        const dotNav  = document.getElementById('dot-nav');
+        const canvas  = document.getElementById('scroll-canvas');
+        const intro   = document.getElementById('static-intro');
+        const panels  = document.querySelectorAll('.chapter-panel');
+        const dots    = document.querySelectorAll('.nav-dot');
+        const counter = document.getElementById('page-counter');
+        let current = 0;
+        let introBottom = 0;
+
+        function sizeCanvas() {
+            introBottom = intro.offsetHeight;
+            canvas.style.height = `${TOTAL * window.innerHeight}px`;
+        }
+        sizeCanvas();
+        window.addEventListener('resize', sizeCanvas);
+
+        function goTo(next) {
+            if (next === current) return;
+            const prev   = panels[current];
+            const target = panels[next];
+            prev.classList.remove('is-active');
+            prev.classList.add('is-exiting');
+            prev.addEventListener('transitionend', () => {
+                prev.classList.remove('is-exiting');
+                prev.style.cssText = '';
+            }, { once: true });
+            target.style.opacity   = '0';
+            target.style.transform = next > current ? 'translateY(48px)' : 'translateY(-48px)';
+            target.getBoundingClientRect();
+            target.style.cssText = '';
+            target.classList.add('is-active');
+            current = next;
+            updateDots(next);
+        }
+
+        function updateDots(idx) {
+            dots.forEach((d, i) => {
+                if (i === idx) {
+                    d.classList.remove('w-3', 'h-3', 'bg-[#d1c9b8]', 'dark:bg-[#4a4238]');
+                    d.classList.add('w-4', 'h-4', 'bg-[#064e3b]', 'dark:bg-[#b02a2a]');
+                } else {
+                    d.classList.remove('w-4', 'h-4', 'bg-[#064e3b]', 'dark:bg-[#b02a2a]');
+                    d.classList.add('w-3', 'h-3', 'bg-[#d1c9b8]', 'dark:bg-[#4a4238]');
+                }
+            });
+            counter.textContent = `${idx + 1} / ${TOTAL}`;
+            const labels = ['01 · The Beginnings', '02 · Television Career', '03 · Underland Chronicles', '04 · The Hunger Games', '05 · Finale & Legacy'];
+            const lbl = document.getElementById('dot-chapter');
+            if (lbl) lbl.textContent = labels[idx];
+        }
+
+        function jumpToSlide(idx) {
+            window.scrollTo({ top: introBottom + idx * window.innerHeight, behavior: 'smooth' });
+        }
+
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const y    = window.scrollY;
+                const past = y >= introBottom - 40;
+                const idx  = Math.max(0, Math.min(TOTAL - 1,
+                    Math.floor((y - introBottom + window.innerHeight * 0.35) / window.innerHeight)));
+                if (past) {
+                    stage.classList.add('is-visible');
+                    dotNav.style.opacity = '1';
+                    dotNav.style.pointerEvents = 'auto';
+                    goTo(idx);
+                } else {
+                    stage.classList.remove('is-visible');
+                    dotNav.style.opacity = '0';
+                    dotNav.style.pointerEvents = 'none';
+                }
+                ticking = false;
+            });
+        });
+
+        window.addEventListener('keydown', e => {
+            if (!stage.classList.contains('is-visible')) return;
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); jumpToSlide(Math.min(TOTAL - 1, current + 1)); }
+            else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); jumpToSlide(Math.max(0, current - 1)); }
+        });
+    </script>
+</body>
+</html>

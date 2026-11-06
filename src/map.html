@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="An interactive atlas of Panem: explore the thirteen districts and the Capitol on a real-geography map of former North America, from District 4's Pacific coast to District 13 in the Northeast.">
+    <title>Atlas of Panem | Interactive Map | Suzanne Collins Official Author Website</title>
+    <!-- Apply the saved theme before first paint so dark mode never flashes light -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('sc-theme');
+                var dark = saved ? saved === 'dark'
+                                 : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark', dark);
+                document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+            } catch (e) { /* ignore private-mode storage errors */ }
+        })();
+    </script>
+    <meta name="view-transition" content="same-origin">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        academia: {
+                            parchment: '#fcfaf2',
+                            cream:     '#f4ede0',
+                            card:      '#ffffff',
+                            border:    '#e2d8c3',
+                            burgundy:  '#7c2d12',
+                            gold:      '#b45309',
+                            ink:       '#292524',
+                            muted:     '#57534e'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Georgia', 'Cambria', 'Baskerville', 'Times New Roman', 'serif'],
+                        sans:  ['system-ui', '-apple-system', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Smooth slide transitions between pages -->
+    <style>
+        @keyframes pageSlideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        body {
+            /* "backwards" clears the transform after the animation ends so
+               position: fixed descendants stay fixed to the viewport. */
+            animation: pageSlideInFromLeft 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+        .page-slide-out-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* ── Atlas of Panem ─────────────────────────────────────────────
+           The SVG map needs fill/stroke states that Tailwind utilities
+           cannot express for dynamically selected SVG groups. */
+        .panem-map-svg { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+
+        .panem-ocean { fill: #eef1ea; }
+        .dark .panem-ocean { fill: #141210; }
+
+        .panem-land-base { fill: #eadfc8; stroke: #c9b896; stroke-width: 2; }
+        .dark .panem-land-base { fill: #171410; stroke: #3b342c; }
+
+        .panem-territory {
+            fill: var(--tint, #ddd5c5);
+            fill-opacity: 0.5;
+            stroke: #fcfaf2;
+            stroke-width: 1.5;
+            stroke-linejoin: round;
+            cursor: pointer;
+            outline: none;
+            transition: fill-opacity .25s ease, stroke .25s ease, stroke-width .25s ease, filter .25s ease;
+        }
+        .dark .panem-territory { stroke: #12100e; }
+
+        /* Hover highlight: lift the territory it belongs to and gently dim
+           every neighbour so the hovered district reads instantly. */
+        .panem-territory.is-hover,
+        .panem-territory.is-active {
+            fill-opacity: 0.95;
+            stroke: #064e3b;
+            stroke-width: 3;
+            filter: saturate(1.25);
+        }
+        .dark .panem-territory.is-hover,
+        .dark .panem-territory.is-active {
+            stroke: #e7b04a;
+            filter: saturate(1.4) brightness(1.15);
+        }
+        .panem-map-svg.has-hover .panem-territory:not(.is-hover):not(.is-active) {
+            fill-opacity: 0.22;
+            filter: grayscale(0.45);
+        }
+        .panem-territory:focus-visible {
+            fill-opacity: 0.95;
+            stroke: #b45309;
+            stroke-width: 3;
+        }
+        .dark .panem-territory:focus-visible { stroke: #f4ca72; }
+
+        .panem-state-line { stroke: #b45309; stroke-width: 0.7; opacity: 0.28; vector-effect: non-scaling-stroke; }
+        .dark .panem-state-line { stroke: #e7b04a; opacity: 0.22; }
+        .panem-map-svg.has-hover .panem-state-line { opacity: 0.10; }
+        .dark .panem-map-svg.has-hover .panem-state-line { opacity: 0.08; }
+
+        .panem-river { fill: none; stroke: #5f8577; stroke-width: 2; stroke-linecap: round; opacity: 0.5; vector-effect: non-scaling-stroke; }
+        .dark .panem-river { stroke: #6f9184; opacity: 0.6; }
+
+        .panem-geo-label { fill: #8a6a35; font-size: 10px; font-weight: 800; letter-spacing: .22em; opacity: .7; pointer-events: none; }
+        .dark .panem-geo-label { fill: #b0a48f; opacity: .55; }
+        .panem-ocean-label { fill: #7fa08e; font-size: 10px; font-weight: 700; letter-spacing: .3em; opacity: .65; pointer-events: none; }
+        .dark .panem-ocean-label { fill: #4f6d5e; opacity: .7; }
+
+        .panem-map-caption { fill: #57534e; font-size: 11px; font-weight: 800; letter-spacing: .3em; opacity: .6; pointer-events: none; }
+        .dark .panem-map-caption { fill: #b0a48f; }
+
+        .panem-compass circle { fill: none; stroke: #b45309; opacity: .30; }
+        .panem-compass path { fill: #b45309; opacity: .55; }
+        .panem-compass text { fill: #b45309; font-size: 9px; font-weight: 700; letter-spacing: .12em; opacity: .8; }
+        .dark .panem-compass circle { stroke: #e7b04a; opacity: .22; }
+        .dark .panem-compass path { fill: #e7b04a; opacity: .45; }
+        .dark .panem-compass text { fill: #e7b04a; }
+
+        .panem-marker { cursor: pointer; outline: none; }
+        .panem-marker-halo { fill: #064e3b; opacity: 0; transition: opacity .2s ease; }
+        .dark .panem-marker-halo { fill: #e7b04a; }
+        .panem-marker-dot {
+            fill: #fcfaf2;
+            stroke: #064e3b;
+            stroke-width: 2;
+            transition: fill .2s ease, stroke .2s ease, transform .2s ease;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        .dark .panem-marker-dot { fill: #12100e; stroke: #b02a2a; }
+        .panem-marker-number { fill: #064e3b; font-size: 10.5px; font-weight: 800; pointer-events: none; }
+        .dark .panem-marker-number { fill: #f1e7d4; }
+        .panem-marker-label {
+            fill: #57534e;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            pointer-events: none;
+            paint-order: stroke;
+            stroke: #fcfaf2;
+            stroke-width: 3px;
+            stroke-linejoin: round;
+        }
+        .dark .panem-marker-label { fill: #b0a48f; stroke: #12100e; }
+
+        .panem-marker.is-hover .panem-marker-halo,
+        .panem-marker.is-active .panem-marker-halo,
+        .panem-marker:focus-visible .panem-marker-halo { opacity: .18; }
+        .panem-marker.is-hover .panem-marker-dot,
+        .panem-marker:focus-visible .panem-marker-dot,
+        .panem-marker.is-active .panem-marker-dot {
+            fill: #064e3b;
+            stroke: #d97706;
+            transform: scale(1.3);
+        }
+        .dark .panem-marker.is-hover .panem-marker-dot,
+        .dark .panem-marker:focus-visible .panem-marker-dot,
+        .dark .panem-marker.is-active .panem-marker-dot {
+            fill: #e7b04a;
+            stroke: #f4ca72;
+        }
+        .panem-marker.is-hover .panem-marker-number,
+        .panem-marker:focus-visible .panem-marker-number,
+        .panem-marker.is-active .panem-marker-number { fill: #fcfaf2; }
+        .dark .panem-marker.is-hover .panem-marker-number,
+        .dark .panem-marker:focus-visible .panem-marker-number,
+        .dark .panem-marker.is-active .panem-marker-number { fill: #12100e; }
+        .panem-marker.is-hover .panem-marker-label,
+        .panem-marker:focus-visible .panem-marker-label,
+        .panem-marker.is-active .panem-marker-label { fill: #064e3b; }
+        .dark .panem-marker.is-hover .panem-marker-label,
+        .dark .panem-marker:focus-visible .panem-marker-label,
+        .dark .panem-marker.is-active .panem-marker-label { fill: #e7b04a; }
+
+        .panem-capitol-halo {
+            fill: #e7b04a;
+            opacity: .14;
+            stroke: #b45309;
+            stroke-width: 1;
+            stroke-dasharray: 2 4;
+            transition: opacity .2s ease, stroke .2s ease;
+        }
+        .panem-marker.is-hover .panem-capitol-halo,
+        .panem-marker.is-active .panem-capitol-halo { opacity: .3; stroke: #d97706; }
+        .panem-capitol-star { transition: fill .2s ease, transform .2s ease; transform-box: fill-box; transform-origin: center; }
+        .panem-marker.is-hover .panem-capitol-star,
+        .panem-marker.is-active .panem-capitol-star { fill: #b45309; transform: scale(1.25); font-size: 12px; }
+
+        .panem-map-svg { cursor: grab; touch-action: none; }
+        .panem-map-svg.is-panning { cursor: grabbing; }
+        .panem-map-svg.is-zoomed { cursor: grab; }
+
+        .panem-tooltip {
+            position: absolute;
+            z-index: 30;
+            transform: translate(-50%, -130%);
+            pointer-events: none;
+            background: #292524;
+            border-radius: 0.6rem;
+            padding: 0.45rem 0.75rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+            white-space: nowrap;
+            opacity: 0;
+            scale: 0.92;
+            transition: opacity .2s ease, scale .2s ease;
+        }
+        .panem-tooltip.is-visible { opacity: 1; scale: 1; }
+        .panem-tooltip-label { display: block; font-size: 10px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: #e7b04a; }
+        .panem-tooltip-name { display: block; margin-top: 2px; font-size: 12px; font-weight: 700; color: #fcfaf2; }
+        .dark .panem-tooltip { background: #f1e7d4; }
+        .dark .panem-tooltip-label { color: #b45309; }
+        .dark .panem-tooltip-name { color: #292524; }
+
+        @keyframes panemInfoIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .panem-info-enter { animation: panemInfoIn .35s cubic-bezier(.16, 1, .3, 1) both; }
+
+        .panem-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.1rem;
+            height: 2.1rem;
+            padding: 0 .45rem;
+            border-radius: .65rem;
+            border: 1px solid #e2d8c3;
+            background: #ffffff;
+            color: #57534e;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+        }
+        .panem-chip:hover { border-color: #064e3b; color: #064e3b; transform: translateY(-1px); }
+        .panem-chip.is-active { background: #064e3b; border-color: #064e3b; color: #fcfaf2; }
+        .dark .panem-chip { background: #211d19; border-color: #3b342c; color: #b0a48f; }
+        .dark .panem-chip:hover { border-color: #e7b04a; color: #e7b04a; }
+        .dark .panem-chip.is-active { background: #e7b04a; border-color: #e7b04a; color: #12100e; }
+        .panem-chip:focus-visible { outline: 2px solid #b45309; outline-offset: 2px; }
+        .dark .panem-chip:focus-visible { outline-color: #e7b04a; }
+
+        .panem-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            width: 100%;
+            border-radius: 1rem;
+            border: 1px solid #e2d8c3;
+            background: #ffffff;
+            padding: 0.9rem 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: border-color .25s ease, background .25s ease, transform .25s ease, box-shadow .25s ease;
+        }
+        .dark .panem-card { border-color: #3b342c; background: #211d19; }
+        .panem-card:hover { border-color: var(--tint-dark, #064e3b); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(41,37,36,0.10); }
+        .panem-card.is-active { border-color: #064e3b; box-shadow: 0 10px 24px rgba(6,78,59,0.14); background: #fbf8f1; }
+        .dark .panem-card:hover { border-color: #e7b04a; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
+        .dark .panem-card.is-active { border-color: #e7b04a; background: #211d19; }
+        .panem-card:focus-visible { outline: 2px solid #b45309; outline-offset: 2px; }
+        .dark .panem-card:focus-visible { outline-color: #e7b04a; }
+        .panem-card-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.8rem;
+            background: var(--tint, #ddd5c5);
+            color: var(--tint-dark, #302b25);
+            font-size: 13px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 639px) {
+            .panem-marker-label { display: none; }
+            .panem-geo-label, .panem-ocean-label { display: none; }
+        }
+            @media (prefers-reduced-motion: reduce) { body { animation: none; } .page-slide-out-right { transition: none; } }
+    </style>
+</head>
+<body class="bg-[#fcfaf2] dark:bg-[#12100e] text-[#292524] dark:text-[#f1e7d4] font-sans antialiased selection:bg-[#7c2d12] selection:text-[#fcfaf2] transition-colors duration-300 dark:selection:bg-[#b02a2a] dark:selection:text-[#f6efdf]">
+
+    <!-- ── FIXED HEADER ─────────────────────────────────────────────────── -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-[#fcfaf2]/90 dark:bg-[#12100e]/90 backdrop-blur-md border-b border-[#e2d8c3] dark:border-[#3b342c] transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <a href="index.html" class="group flex items-center gap-2 py-2">
+                    <span class="font-serif tracking-widest text-2xl font-bold uppercase text-[#0f172a] dark:text-[#f1e7d4] group-hover:text-[#064e3b] dark:group-hover:text-[#f4ca72] transition-colors">SC</span>
+                    <span class="hidden sm:inline text-xs font-serif italic text-[#57534e] dark:text-[#b0a48f]">&bull; The Hunger Games Atlas</span>
+                </a>
+                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+                    <a href="index.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Home</a>
+                    <a href="map.html" aria-current="page" class="text-[#064e3b] dark:text-[#e7b04a] transition-colors">Map of Panem</a>
+                    <a href="collections.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Collections</a>
+                    <a href="biography.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Biography</a>
+                    <a href="viewing-guide.html" class="text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Viewing Guide</a>
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors shadow-xs" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                </nav>
+
+                <!-- Mobile controls -->
+                <div class="flex items-center gap-2 md:hidden">
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="p-2 text-[#0f172a] hover:text-[#064e3b] dark:text-[#f1e7d4] dark:hover:text-[#f4ca72] transition-colors" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-menu">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-3 pb-5 space-y-1 bg-[#fcfaf2]/95 backdrop-blur-md border-b border-[#e2d8c3] shadow-md dark:bg-[#12100e]/95 dark:border-[#3b342c]">
+            <a href="index.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Home</a>
+            <a href="map.html" aria-current="page" class="block rounded-lg px-3 py-2 bg-[#064e3b]/10 text-[#064e3b] font-semibold dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">Map of Panem</a>
+            <a href="collections.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Collections</a>
+            <a href="biography.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Biography</a>
+            <a href="viewing-guide.html" class="block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Viewing Guide</a>
+        </div>
+    </header>
+
+    <main id="top">
+        <!-- ══ HERO ═════════════════════════════════════════════════════════ -->
+        <section class="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-24 border-b border-[#e2d8c3] dark:border-[#3b342c] bg-cover bg-center bg-no-repeat" style="background-image: url('assets/image/misty-forest.jpg');">
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#fcfaf2]/30 via-[#fcfaf2]/75 to-[#fcfaf2] dark:from-[#12100e]/55 dark:via-[#12100e]/80 dark:to-[#12100e]"></div>
+            <div class="pointer-events-none absolute inset-0 hidden dark:block bg-[#0b0a09]/55"></div>
+            <div class="pointer-events-none absolute inset-0 hidden dark:block bg-[radial-gradient(ellipse_at_50%_-10%,rgba(231,176,74,0.18),transparent_55%)]"></div>
+            <div class="pointer-events-none absolute inset-0 hidden dark:block bg-[radial-gradient(ellipse_at_50%_115%,rgba(176,42,42,0.20),transparent_55%)]"></div>
+
+            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-[#fcfaf2]/95 backdrop-blur-sm border border-[#064e3b]/30 text-[#064e3b] mb-6 shadow-sm dark:bg-[#12100e]/95 dark:border-[#b02a2a]/40 dark:text-[#e7b04a]">
+                    <i class="fa-solid fa-compass text-[#d97706] dark:text-[#e7b04a]"></i> The Hunger Games Atlas
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-[#0f172a] leading-tight mb-6 drop-shadow-sm dark:text-[#f1e7d4]">
+                    The Districts<br>
+                    <span class="italic text-[#064e3b] dark:text-[#e7b04a] dark:drop-shadow-[0_0_22px_rgba(231,176,74,0.35)]">of Panem</span>
+                </h1>
+
+                <p class="max-w-2xl mx-auto text-base sm:text-lg leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                    Explore a nation drawn on real geography: the Pacific shore of District 4, the coal seams of Appalachia, the forests of the Northwest, and the Capitol in the Rockies. Hover to highlight a district &mdash; click to read its story.
+                </p>
+
+                <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+                    <a href="#atlas" class="transition-link inline-flex items-center gap-2 rounded-full bg-[#064e3b] px-6 py-3 text-sm font-semibold text-[#fcfaf2] shadow-sm transition-colors hover:bg-[#022c22] dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">
+                        <i class="fa-solid fa-map-location-dot text-[#e7b04a]"></i>
+                        Open the atlas
+                    </a>
+                    <a href="collections.html#hunger-games" class="transition-link inline-flex items-center gap-2 rounded-full border border-[#064e3b]/40 bg-white/70 px-6 py-3 text-sm font-semibold text-[#064e3b] transition-colors hover:bg-white dark:border-[#b02a2a]/50 dark:bg-[#12100e]/70 dark:text-[#e7b04a] dark:hover:bg-[#211d19]">
+                        <i class="fa-solid fa-timeline"></i>
+                        Follow the timeline
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ ATLAS ════════════════════════════════════════════════════════ -->
+        <section id="atlas" class="scroll-mt-24 py-14 lg:py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-[#b45309] dark:text-[#e7b04a]">
+                        <i class="fa-solid fa-map mr-1.5"></i>Interactive atlas
+                    </p>
+                    <h2 class="mt-2 font-serif text-3xl sm:text-4xl font-bold text-[#0f172a] dark:text-[#f1e7d4]">One nation, fourteen districts</h2>
+                    <p class="mt-3 text-sm sm:text-base leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                        Panem is not drawn in the novels, so this atlas reads the clues: a warm-water coast for District 4, grain plains for District 9, Appalachia for District 12. District borders are interpretive &mdash; the land itself is real.
+                    </p>
+                </div>
+
+                <div class="mt-8 grid gap-6 xl:grid-cols-[1.7fr_1fr]">
+                    <!-- Map column -->
+                    <div class="min-w-0">
+                        <div id="panem-map-shell"
+                             class="relative overflow-hidden rounded-2xl border border-[#e2d8c3] bg-[#f8f2e7] shadow-sm dark:border-[#3b342c] dark:bg-[#12100e]">
+                            <svg id="panem-map" class="panem-map-svg h-auto w-full select-none" viewBox="0 0 1000 620"
+                                 role="group" aria-label="Map of Panem: hover or select a district territory to highlight it">
+                                <defs>
+                                    <radialGradient id="panem-capitol-glow" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#e7b04a" stop-opacity="0.35"/>
+                                        <stop offset="100%" stop-color="#e7b04a" stop-opacity="0"/>
+                                    </radialGradient>
+                                </defs>
+
+                                <rect class="panem-ocean" x="0" y="0" width="1000" height="620"/>
+
+                                <path id="panem-outline" class="panem-land-base" d=""/>
+
+                                <g id="panem-territories" aria-label="District territories"></g>
+                                <g id="panem-state-lines" aria-hidden="true"></g>
+                                <g id="panem-rivers" aria-hidden="true"></g>
+                                <g id="panem-context-labels" aria-hidden="true"></g>
+                                <g id="panem-markers" aria-label="District markers"></g>
+
+                                <text class="panem-map-caption" x="30" y="52">PANEM</text>
+                                <text class="panem-map-caption" x="970" y="600" text-anchor="end">THE HUNGER GAMES ATLAS</text>
+                                <g class="panem-compass" transform="translate(952 66)" aria-hidden="true">
+                                    <circle r="22"/>
+                                    <path d="M0 -15 L5 3 L0 -1 L-5 3 Z"/>
+                                    <text y="-29" text-anchor="middle">N</text>
+                                </g>
+                            </svg>
+
+                            <div id="panem-tooltip" class="panem-tooltip" role="tooltip" aria-hidden="true"></div>
+
+                            <!-- Zoom controls -->
+                            <div class="absolute right-3 top-3 z-40 flex flex-col gap-1.5" role="group" aria-label="Map zoom controls">
+                                <button type="button" data-map-action="in"
+                                        class="flex h-10 w-10 items-center justify-center rounded-xl border border-[#e2d8c3] bg-white/95 text-[#064e3b] shadow-md transition-colors  dark:border-[#3b342c] dark:bg-[#211d19]/95 dark:text-[#e7b04a]"
+                                        aria-label="Zoom in">
+                                    <i class="fa-solid fa-plus text-sm"></i>
+                                </button>
+                                <button type="button" data-map-action="out"
+                                        class="flex h-10 w-10 items-center justify-center rounded-xl border border-[#e2d8c3] bg-white/95 text-[#064e3b] shadow-md transition-colors  dark:border-[#3b342c] dark:bg-[#211d19]/95 dark:text-[#e7b04a]"
+                                        aria-label="Zoom out">
+                                    <i class="fa-solid fa-minus text-sm"></i>
+                                </button>
+                                <button type="button" data-map-action="reset"
+                                        class="flex h-10 w-10 items-center justify-center rounded-xl border border-[#e2d8c3] bg-white/95 text-[#064e3b] shadow-md transition-colors  dark:border-[#3b342c] dark:bg-[#211d19]/95 dark:text-[#e7b04a]"
+                                        aria-label="Reset the view">
+                                    <i class="fa-solid fa-rotate-left text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick select -->
+                        <div class="mt-4 flex flex-wrap items-center gap-2">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#57534e] dark:text-[#b0a48f]">Quick select</span>
+                            <div id="panem-district-chips" class="flex flex-wrap gap-1.5"></div>
+                        </div>
+
+                        <div class="mt-4 grid gap-2 text-[11px] leading-relaxed text-[#57534e] dark:text-[#b0a48f] sm:grid-cols-3">
+                            <p class="flex items-start gap-2 rounded-xl border border-[#e2d8c3] bg-white/60 px-3 py-2 dark:border-[#3b342c] dark:bg-[#12100e]/40">
+                                <i class="fa-solid fa-hand-pointer mt-0.5 shrink-0 text-[#b45309] dark:text-[#e7b04a]"></i>
+                                Hover a territory to highlight it; click to pin its story.
+                            </p>
+                            <p class="flex items-start gap-2 rounded-xl border border-[#e2d8c3] bg-white/60 px-3 py-2 dark:border-[#3b342c] dark:bg-[#12100e]/40">
+                                <i class="fa-solid fa-magnifying-glass-plus mt-0.5 shrink-0 text-[#b45309] dark:text-[#e7b04a]"></i>
+                                Scroll or double-click to zoom; drag to pan across Panem.
+                            </p>
+                            <p class="flex items-start gap-2 rounded-xl border border-[#e2d8c3] bg-white/60 px-3 py-2 dark:border-[#3b342c] dark:bg-[#12100e]/40">
+                                <i class="fa-solid fa-keyboard mt-0.5 shrink-0 text-[#b45309] dark:text-[#e7b04a]"></i>
+                                Tab to a territory or marker, then press Enter to select it.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- District information column -->
+                    <aside id="panem-info"
+                           class="scroll-mt-24 rounded-2xl border border-[#e2d8c3] bg-white/60 p-5 dark:border-[#3b342c] dark:bg-[#12100e]/40 sm:p-6"
+                           aria-live="polite" aria-atomic="true">
+                        <p class="text-sm text-[#57534e] dark:text-[#b0a48f]">Select a district on the map to read its story.</p>
+                    </aside>
+                </div>
+
+                <!-- ── How this map was drawn ─────────────────────────── -->
+                <div class="mt-14 grid gap-6 lg:grid-cols-3">
+                    <article class="rounded-2xl border border-[#e2d8c3] bg-white/60 p-6 dark:border-[#3b342c] dark:bg-[#12100e]/40">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#b45309] dark:text-[#e7b04a]">
+                            <i class="fa-solid fa-compass mr-1.5"></i>Real ground
+                        </p>
+                        <h3 class="mt-2 font-serif text-xl font-bold text-[#0f172a] dark:text-[#f1e7d4]">Former North America</h3>
+                        <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                            The map is projected from actual coordinates with an Albers equal-area projection, the standard for United States maps. Rivers, ranges, lakes, and the faint outlines of the old states are all in their true places.
+                        </p>
+                    </article>
+                    <article class="rounded-2xl border border-[#e2d8c3] bg-white/60 p-6 dark:border-[#3b342c] dark:bg-[#12100e]/40">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#b45309] dark:text-[#e7b04a]">
+                            <i class="fa-solid fa-pen-ruler mr-1.5"></i>Interpretive borders
+                        </p>
+                        <h3 class="mt-2 font-serif text-xl font-bold text-[#0f172a] dark:text-[#f1e7d4]">Drawn from the clues</h3>
+                        <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                            The books never publish Panem&rsquo;s borders. District 12 is placed in Appalachia, District 13 in the Northeast, and the Capitol in the Rockies, following the saga&rsquo;s clues and the long-standing reader geography of Panem.
+                        </p>
+                    </article>
+                    <article class="rounded-2xl border border-[#e2d8c3] bg-white/60 p-6 dark:border-[#3b342c] dark:bg-[#12100e]/40">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#b45309] dark:text-[#e7b04a]">
+                            <i class="fa-solid fa-triangle-exclamation mr-1.5"></i>Not canon
+                        </p>
+                        <h3 class="mt-2 font-serif text-xl font-bold text-[#0f172a] dark:text-[#f1e7d4]">A fan atlas</h3>
+                        <p class="mt-2 text-sm leading-relaxed text-[#57534e] dark:text-[#b0a48f]">
+                            Borders and placements are a loving interpretation, not an official map. District contents follow the novels and films; if two districts could share a state, this atlas picks the reading that fits the story best.
+                        </p>
+                    </article>
+                </div>
+
+                <!-- ── District index ─────────────────────────────────── -->
+                <div class="mt-14">
+                    <div class="flex flex-wrap items-end justify-between gap-3">
+                        <div>
+                            <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-[#b45309] dark:text-[#e7b04a]">
+                                <i class="fa-solid fa-list mr-1.5"></i>District index
+                            </p>
+                            <h2 class="mt-2 font-serif text-2xl sm:text-3xl font-bold text-[#0f172a] dark:text-[#f1e7d4]">Browse the districts</h2>
+                        </div>
+                        <p class="max-w-md text-xs leading-relaxed text-[#57534e] dark:text-[#b0a48f]">Each card jumps back to the map and pins the district&rsquo;s story in the panel above.</p>
+                    </div>
+                    <div id="panem-district-index" class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ── FOOTER ───────────────────────────────────────────────────────── -->
+    <footer id="site-footer" class="bg-[#fcfaf2] border-t border-[#e2d8c3] dark:bg-[#12100e] dark:border-[#3b342c]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Links & social -->
+            <div class="flex flex-col gap-8 border-b border-[#e2d8c3] py-10 dark:border-[#3b342c] md:flex-row md:items-center md:justify-between">
+                <div>
+                    <a href="index.html" class="font-serif tracking-widest text-lg font-bold uppercase text-[#292524] hover:text-[#064e3b] dark:text-[#ece2cf] dark:hover:text-[#f4ca72] transition-colors">Suzanne Collins</a>
+                    <p class="mt-1 text-xs sm:text-sm text-[#57534e] dark:text-[#b0a48f]">Literary works and chronicles.</p>
+                </div>
+                <nav class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold">
+                    <a href="index.html" class="text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Home</a>
+                    <a href="map.html" class="text-[#064e3b] dark:text-[#e7b04a]">Map of Panem</a>
+                    <a href="collections.html" class="transition-link text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Collections</a>
+                    <a href="biography.html" class="transition-link text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Biography</a>
+                    <a href="viewing-guide.html" class="text-[#57534e] hover:text-[#064e3b] dark:text-[#b0a48f] dark:hover:text-[#f4ca72] transition-colors">Viewing Guide</a>
+                </nav>
+                <div class="flex items-center gap-3">
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="X">
+                        <i class="fa-brands fa-x-twitter text-sm"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram text-sm"></i>
+                    </a>
+                    <a href="https://goodreads.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Goodreads">
+                        <i class="fa-brands fa-goodreads-g text-sm"></i>
+                    </a>
+                    <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Official Website">
+                        <i class="fa-solid fa-globe text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="flex flex-col items-center justify-between gap-3 py-8 text-xs text-[#57534e] dark:text-[#b0a48f] sm:flex-row">
+                <p>&copy; 2026 Suzanne Collins. All rights reserved. Original reference: <a href="https://www.suzannecollinsbooks.com" class="font-medium text-[#7c2d12] hover:underline dark:text-[#f08a8a]">suzannecollinsbooks.com</a>.</p>
+                <p>Designed with Semantic HTML5 &amp; Tailwind CSS.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to top -->
+    <button id="to-top" class="fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-[#e2d8c3] bg-white/95 text-[#064e3b] shadow-lg backdrop-blur-sm transition-colors duration-300 hover:bg-[#f4ede0] opacity-0 pointer-events-none translate-y-2 dark:border-[#3b342c] dark:bg-[#211d19]/95 dark:text-[#e7b04a] dark:hover:bg-[#2c2721]" aria-label="Back to top">
+        <i class="fa-solid fa-arrow-up text-sm"></i>
+    </button>
+
+    <script src="assets/js/panem-geo.js"></script>
+    <script src="assets/js/panem-map.js"></script>
+
+    <script>
+        /* ── Dark / light mode ────────────────────────────────────────── */
+        const html = document.documentElement;
+        const themeButtons = document.querySelectorAll('.theme-toggle');
+
+        function applyTheme(dark) {
+            html.classList.toggle('dark', dark);
+            html.style.colorScheme = dark ? 'dark' : 'light';
+            themeButtons.forEach((btn) => {
+                btn.innerHTML = dark
+                    ? '<i class="fa-solid fa-sun text-sm"></i>'
+                    : '<i class="fa-solid fa-moon text-sm"></i>';
+                btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+                btn.setAttribute('title', dark ? 'Switch to light mode' : 'Switch to dark mode');
+            });
+        }
+
+        const stored = localStorage.getItem('sc-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(stored ? stored === 'dark' : prefersDark);
+
+        themeButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const isDark = !html.classList.contains('dark');
+                applyTheme(isDark);
+                localStorage.setItem('sc-theme', isDark ? 'dark' : 'light');
+            });
+        });
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'sc-theme') applyTheme(e.newValue === 'dark');
+        });
+
+        /* ── Mobile menu ──────────────────────────────────────────────── */
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.toggle('hidden');
+                menuBtn.setAttribute('aria-expanded', String(!isHidden));
+            });
+            mobileMenu.querySelectorAll('a').forEach((link) => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuBtn.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+
+        /* ── Back to top ──────────────────────────────────────────────── */
+        const toTop = document.getElementById('to-top');
+
+        function toggleToTop() {
+            if (!toTop) return;
+            const visible = window.scrollY > 500;
+            toTop.classList.toggle('opacity-0', !visible);
+            toTop.classList.toggle('pointer-events-none', !visible);
+            toTop.classList.toggle('translate-y-2', !visible);
+        }
+
+        if (toTop) {
+            window.addEventListener('scroll', toggleToTop, { passive: true });
+            toggleToTop();
+            toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        }
+
+        /* ── Smooth page transitions ──────────────────────────────────── */
+        document.querySelectorAll('a.transition-link').forEach((link) => {
+            link.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#')) return;
+
+                e.preventDefault();
+                document.body.classList.add('page-slide-out-right');
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 260);
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>SC | Suzanne Collins Official Author Website</title>
+    <!-- Apply the saved theme before first paint so dark mode never flashes light -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('sc-theme');
+                var dark = saved ? saved === 'dark'
+                                 : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark', dark);
+                document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+            } catch (e) { /* ignore private-mode storage errors */ }
+        })();
+    </script>
+    <!-- View Transition support for native cross-document transitions -->
+    <meta name="view-transition" content="same-origin">
+    <!-- Tailwind CSS via CDN (Assignment requirement) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        academia: {
+                            parchment: '#fcfaf2',    /* Warm light parchment background */
+                            cream: '#f4ede0',        /* Soft ivory/cream container */
+                            card: '#ffffff',         /* Crisp clean paper card */
+                            border: '#e2d8c3',       /* Book-page border tone */
+                            burgundy: '#7c2d12',     /* Deep rich literary oxblood / mahogany */
+                            burgundyDark: '#5c1d0d', /* Darker oxblood for hover */
+                            gold: '#b45309',         /* Warm antique gold / bronze */
+                            ink: '#292524',          /* Dark slate ink for text (Stone 800) */
+                            muted: '#57534e'         /* Muted ink for secondary text (Stone 600) */
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Georgia', 'Cambria', 'Baskerville', 'Times New Roman', 'serif'],
+                        sans: ['system-ui', '-apple-system', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Fallback compiled stylesheet from local workflow -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Font Awesome / Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Smooth slide transitions -->
+    <style>
+        @keyframes pageSlideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        body {
+            /* "backwards" clears the transform after the animation ends; a
+               lingering transform would break position: fixed descendants. */
+            animation: pageSlideInFromLeft 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+        .page-slide-out-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+            @media (prefers-reduced-motion: reduce) { body { animation: none; } .page-slide-out-right { transition: none; } }
+    </style>
+</head>
+<body class="bg-[#fcfaf2] dark:bg-[#12100e] text-[#292524] dark:text-[#f1e7d4] font-sans antialiased selection:bg-[#7c2d12] selection:text-[#fcfaf2] transition-colors duration-300 dark:selection:bg-[#b02a2a] dark:selection:text-[#f6efdf]">
+
+    <!-- ── FIXED HEADER ─────────────────────────────────────────────────── -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-[#fcfaf2]/90 dark:bg-[#12100e]/90 backdrop-blur-md border-b border-[#e2d8c3] dark:border-[#3b342c] transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <a href="index.html" class="group flex items-center gap-2 py-2">
+                    <span class="font-serif tracking-widest text-2xl font-bold uppercase text-[#0f172a] dark:text-[#f1e7d4] group-hover:text-[#064e3b] dark:group-hover:text-[#f4ca72] transition-colors">SC</span>
+                    <span class="hidden sm:inline text-xs font-serif italic text-[#57534e] dark:text-[#b0a48f]">&bull; Official Author Website</span>
+                </a>
+                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+                    <a href="index.html" aria-current="page" class="text-[#064e3b] dark:text-[#e7b04a] transition-colors">Home</a>
+                    <a href="map.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Map of Panem</a>
+                    <a href="collections.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Collections</a>
+                    <a href="biography.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Biography</a>
+                    <a href="viewing-guide.html" class="transition-link text-[#0f172a] dark:text-[#d5c9b4] hover:text-[#064e3b] dark:hover:text-[#f4ca72] transition-colors">Viewing Guide</a>
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors shadow-xs" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                </nav>
+
+                <!-- Mobile controls -->
+                <div class="flex items-center gap-2 md:hidden">
+                    <button class="theme-toggle w-9 h-9 rounded-full flex items-center justify-center bg-[#f4ede0] dark:bg-[#211d19] border border-[#e2d8c3] dark:border-[#3b342c] text-[#b45309] dark:text-[#e7b04a] transition-colors" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="p-2 text-[#0f172a] hover:text-[#064e3b] dark:text-[#f1e7d4] dark:hover:text-[#f4ca72] transition-colors" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-menu">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-3 pb-5 space-y-1 bg-[#fcfaf2]/95 backdrop-blur-md border-b border-[#e2d8c3] shadow-md dark:bg-[#12100e]/95 dark:border-[#3b342c]">
+            <a href="index.html" aria-current="page" class="block rounded-lg px-3 py-2 bg-[#064e3b]/10 text-[#064e3b] font-semibold dark:bg-[#e7b04a]/10 dark:text-[#e7b04a]">Home</a>
+            <a href="map.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Map of Panem</a>
+            <a href="collections.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Collections</a>
+            <a href="biography.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Biography</a>
+            <a href="viewing-guide.html" class="transition-link block rounded-lg px-3 py-2 text-[#0f172a] hover:bg-[#f4ede0] hover:text-[#064e3b] font-medium dark:text-[#f1e7d4] dark:hover:bg-[#211d19] dark:hover:text-[#f4ca72]">Viewing Guide</a>
+        </div>
+    </header>
+
+    <!-- MAIN SECTION / HERO with high-resolution crisp misty pine forest -->
+    <main>
+        <section id="hero" class="relative overflow-hidden pt-28 pb-28 lg:pt-36 lg:pb-40 border-b border-[#e2d8c3] bg-cover bg-center bg-no-repeat dark:border-[#3b342c]" style="background-image: url('assets/image/misty-forest.jpg');">
+            <!-- Dark mode: coal scrim over the forest + a low Mockingjay ember glow -->
+            <div class="pointer-events-none absolute inset-0 hidden dark:block bg-[#0b0a09]/70"></div>
+            <!-- Subtle atmospheric fog wash overlay: crystal clear at the top, gentle parchment transition at bottom -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#fcfaf2]/40 to-[#fcfaf2] dark:from-[#12100e]/40 dark:via-[#12100e]/70 dark:to-[#12100e]"></div>
+            <div class="pointer-events-none absolute inset-0 hidden dark:block bg-[radial-gradient(ellipse_at_50%_-10%,rgba(231,176,74,0.18),transparent_55%)]"></div>
+            <div class="pointer-events-none absolute inset-0 hidden dark:block bg-[radial-gradient(ellipse_at_50%_115%,rgba(176,42,42,0.20),transparent_55%)]"></div>
+
+            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <!-- Badge: Forest Pine & Antique Gold -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-[#fcfaf2]/95 backdrop-blur-sm border border-[#064e3b]/30 text-[#064e3b] mb-6 shadow-sm dark:bg-[#12100e]/95 dark:border-[#b02a2a]/40 dark:text-[#e7b04a]">
+                    <i class="fa-solid fa-feather text-[#d97706] dark:text-[#e7b04a]"></i> New York Times Bestselling Author
+                </div>
+
+                <!-- Main Title: Deep ink slate with rich Forest Pine Green -->
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-[#0f172a] leading-tight mb-6 drop-shadow-sm dark:text-[#f1e7d4]">
+                    Suzanne Collins <br>
+                    <span class="italic text-[#064e3b] dark:text-[#e7b04a] dark:drop-shadow-[0_0_22px_rgba(231,176,74,0.35)]">
+                        Stories of Survival, Defiance &amp; Moral Inquiry
+                    </span>
+                </h1>
+
+                <!-- Subtitle: Crisp dark slate ink -->
+                <p class="max-w-2xl mx-auto text-base sm:text-lg text-[#1e293b] leading-relaxed mb-10 font-medium drop-shadow-xs dark:text-[#d5c9b4]">
+                    Official author website — explore the Panem saga, the Underland Chronicles, and picture books, and the ideas that run through them all.
+                </p>
+
+                <!-- CTA Buttons: Forest Pine Green & Antique Gold Accents -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="collections.html" class="transition-link w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#064e3b] hover:bg-[#022c22] text-[#fcfaf2] font-semibold text-base transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 group dark:bg-[#b02a2a] dark:hover:bg-[#8c1f22] dark:text-[#f6efdf]">
+                        <span>Explore Curated Collections</span>
+                        <i class="fa-solid fa-arrow-right text-xs text-[#d97706] group-hover:translate-x-1 transition-transform dark:text-[#e7b04a]"></i>
+                    </a>
+                    <a href="#about" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/95 hover:bg-white border border-[#064e3b]/30 text-[#0f172a] hover:text-[#064e3b] font-semibold text-base transition-colors shadow-sm flex items-center justify-center gap-2 dark:bg-[#211d19]/95 dark:hover:bg-[#2c2721] dark:border-[#b02a2a]/40 dark:text-[#f1e7d4] dark:hover:text-[#f4ca72]">
+                        <i class="fa-solid fa-book-open text-[#d97706] dark:text-[#e7b04a]"></i>
+                        <span>Author Biography</span>
+                    </a>
+                    </div>
+        </section>
+
+        <!-- THEMES: what her work is about (index-unique, editorial) -->
+        <section id="themes" class="py-20 bg-[#f4ede0] border-b border-[#e2d8c3] dark:bg-[#191613] dark:border-[#3b342c]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <p class="text-xs uppercase tracking-widest text-[#b45309] font-bold mb-2 dark:text-[#e7b04a]">Why her books endure</p>
+                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">Three questions at the heart of her work</h2>
+                    <p class="mt-3 text-[#57534e] text-base dark:text-[#b0a48f]">Every series asks them differently — through Panem, through the Underland, and through stories for young readers.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <article class="bg-white rounded-2xl border border-[#e2d8c3] p-8 shadow-sm dark:bg-[#211d19] dark:border-[#3b342c]">
+                        <div class="w-14 h-14 rounded-full bg-[#064e3b] text-[#fcfaf2] flex items-center justify-center mb-5 dark:bg-[#b02a2a] dark:text-[#f6efdf]">
+                            <i class="fa-solid fa-landmark text-xl text-[#d97706] dark:text-[#e7b04a]"></i>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-[#0f172a] mb-3 dark:text-[#f1e7d4]">Power &amp; Propaganda</h3>
+                        <p class="text-[#57534e] text-sm leading-relaxed dark:text-[#b0a48f]">Who controls the story? From the Capitol&rsquo;s broadcasts to the Underland&rsquo;s warring factions, Collins asks how images and narratives are used to govern — and how people resist them.</p>
+                    </article>
+                    <article class="bg-white rounded-2xl border border-[#e2d8c3] p-8 shadow-sm dark:bg-[#211d19] dark:border-[#3b342c]">
+                        <div class="w-14 h-14 rounded-full bg-[#064e3b] text-[#fcfaf2] flex items-center justify-center mb-5 dark:bg-[#b02a2a] dark:text-[#f6efdf]">
+                            <i class="fa-solid fa-scale-balanced text-xl text-[#d97706] dark:text-[#e7b04a]"></i>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-[#0f172a] mb-3 dark:text-[#f1e7d4]">War &amp; Moral Consequence</h3>
+                        <p class="text-[#57534e] text-sm leading-relaxed dark:text-[#b0a48f]">Victory has a cost. Drawing on classical myth, gladiatorial spectacle, and war reporting, she examines what violence does to the people who choose it, survive it, and refuse it.</p>
+                    </article>
+                    <article class="bg-white rounded-2xl border border-[#e2d8c3] p-8 shadow-sm dark:bg-[#211d19] dark:border-[#3b342c]">
+                        <div class="w-14 h-14 rounded-full bg-[#064e3b] text-[#fcfaf2] flex items-center justify-center mb-5 dark:bg-[#b02a2a] dark:text-[#f6efdf]">
+                            <i class="fa-solid fa-seedling text-xl text-[#d97706] dark:text-[#e7b04a]"></i>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-[#0f172a] mb-3 dark:text-[#f1e7d4]">Youth &amp; Agency</h3>
+                        <p class="text-[#57534e] text-sm leading-relaxed dark:text-[#b0a48f]">Young protagonists are not pawns. Whether in the arena, underground, or facing a parent&rsquo;s absence, they must decide what to believe and what to do — even when adults have failed them.</p>
+                    </article>
+                </div>
+                <div class="mt-10 text-center">
+                    <a href="collections.html" class="transition-link inline-flex items-center gap-2 text-sm font-semibold text-[#064e3b] hover:text-[#022c22] dark:text-[#e7b04a] dark:hover:text-[#f4ca72] transition-colors">See how each series explores them <i class="fa-solid fa-arrow-right text-xs"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- DESTINATIONS / CATEGORIES SECTION (Best Seller! | Educational | Picture Books) -->
+        <section id="books" class="py-20 bg-[#fcfaf2] dark:bg-[#12100e]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <p class="text-xs uppercase tracking-widest text-[#b45309] font-bold mb-2 dark:text-[#e7b04a]">Curated Highlights</p>
+                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-[#0f172a] dark:text-[#f1e7d4]">Featured Library Categories</h2>
+                    <p class="mt-3 text-[#57534e] text-base dark:text-[#b0a48f]">Explore by record-breaking titles, pedagogical literary studies, and illustrated picture books.</p>
+                </div>
+
+                <!-- Grid of 3 Cards: Best Seller | Educational | Picture Books -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Card 1: Best Seller! -->
+                    <article class="bg-white rounded-2xl border-2 border-[#d97706]/30 shadow-md hover:shadow-2xl hover:border-[#064e3b] transition-colors duration-300 flex flex-col overflow-hidden group dark:bg-[#211d19] dark:border-[#e7b04a]/30 dark:hover:border-[#b02a2a]">
+                        <div class="h-60 bg-gradient-to-br from-[#fbf5eb] to-[#f0e2cd] flex flex-col items-center justify-center relative p-6 border-b border-[#e2d8c3] dark:from-[#241f19] dark:to-[#1b1714] dark:border-[#3b342c]">
+                            <!-- Visual Category Banner -->
+                            <div class="w-20 h-20 rounded-full bg-[#064e3b] text-[#fcfaf2] flex items-center justify-center shadow-lg transition-transform mb-3 dark:bg-[#b02a2a] dark:text-[#f6efdf]">
+                                <i class="fa-solid fa-award text-3xl text-[#d97706] dark:text-[#e7b04a]"></i>
+                            </div>
+                            <span class="px-4 py-1 rounded-full bg-[#064e3b] text-[#fcfaf2] font-serif font-bold text-sm tracking-wide shadow-xs dark:bg-[#b02a2a] dark:text-[#f6efdf]">
+                                ★ BEST SELLER! ★
+                            </span>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-2xl font-bold font-serif text-[#064e3b] mb-2 dark:text-[#e7b04a]">Best Seller!</h3>
+                                <p class="text-sm font-semibold uppercase tracking-wider text-[#b45309] mb-3 dark:text-[#e7b04a]">The Hunger Games Phenomenon</p>
+                                <p class="text-[#57534e] text-sm leading-relaxed mb-4 dark:text-[#b0a48f]">
+                                    Suzanne Collins' worldwide record-breaking five-novel Panem saga. Translated into 54 languages with over 100 million copies sold across the globe, defining dystopian literature for an entire generation.
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-[#e2d8c3] flex items-center justify-between dark:border-[#3b342c]">
+                                <span class="text-xs text-[#57534e] dark:text-[#b0a48f]"><i class="fa-solid fa-headphones mr-1 text-[#d97706] dark:text-[#e7b04a]"></i> Audio &amp; Box Sets</span>
+                                <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="text-[#064e3b] hover:text-[#022c22] text-sm font-semibold flex items-center gap-1 group/btn dark:text-[#e7b04a] dark:hover:text-[#f4ca72]">
+                                    View Series <i class="fa-solid fa-arrow-up-right-from-square text-xs group-hover/btn:translate-x-0.5 transition-transform"></i>
+                                </a>
+                    </div>
+                    </article>
+
+                    <!-- Card 2: Educational -->
+                    <article class="bg-white rounded-2xl border-2 border-[#064e3b]/30 shadow-md hover:shadow-2xl hover:border-[#064e3b] transition-colors duration-300 flex flex-col overflow-hidden group dark:bg-[#211d19] dark:border-[#b02a2a]/40 dark:hover:border-[#b02a2a]">
+                        <div class="h-60 bg-gradient-to-br from-[#fbf5eb] to-[#f0e2cd] flex flex-col items-center justify-center relative p-6 border-b border-[#e2d8c3] dark:from-[#241f19] dark:to-[#1b1714] dark:border-[#3b342c]">
+                            <!-- Visual Category Banner -->
+                            <div class="w-20 h-20 rounded-full bg-[#0f172a] text-[#fcfaf2] flex items-center justify-center shadow-lg transition-transform mb-3 dark:bg-[#3b342c] dark:text-[#f6efdf]">
+                                <i class="fa-solid fa-graduation-cap text-3xl text-amber-200"></i>
+                            </div>
+                            <span class="px-4 py-1 rounded-full bg-[#0f172a] text-[#fcfaf2] font-serif font-bold text-sm tracking-wide shadow-xs dark:bg-[#3b342c] dark:text-[#f6efdf]">
+                                EDUCATIONAL
+                            </span>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-2xl font-bold font-serif text-[#0f172a] mb-2 dark:text-[#f1e7d4]">Educational</h3>
+                                <p class="text-sm font-semibold uppercase tracking-wider text-[#064e3b] mb-3 dark:text-[#e7b04a]">Curriculum &amp; Classroom Guides</p>
+                                <p class="text-[#57534e] text-sm leading-relaxed mb-4 dark:text-[#b0a48f]">
+                                    Official study materials, reading group companions, and lesson plans exploring themes of Just War theory, moral consequence, governmental power, and media literacy in the classroom.
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-[#e2d8c3] flex items-center justify-between dark:border-[#3b342c]">
+                                <span class="text-xs text-[#57534e] dark:text-[#b0a48f]"><i class="fa-solid fa-chalkboard-user mr-1 text-[#d97706] dark:text-[#e7b04a]"></i> Educator Guides</span>
+                                <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="text-[#064e3b] hover:text-[#022c22] text-sm font-semibold flex items-center gap-1 group/btn dark:text-[#e7b04a] dark:hover:text-[#f4ca72]">
+                                    Study Guides <i class="fa-solid fa-arrow-up-right-from-square text-xs group-hover/btn:translate-x-0.5 transition-transform"></i>
+                                </a>
+                    </div>
+                    </article>
+
+                    <!-- Card 3: Picture Books! -->
+                    <article class="bg-white rounded-2xl border-2 border-[#d97706]/30 shadow-md hover:shadow-2xl hover:border-[#d97706] transition-colors duration-300 flex flex-col overflow-hidden group dark:bg-[#211d19] dark:border-[#e7b04a]/30 dark:hover:border-[#e7b04a]">
+                        <div class="h-60 bg-gradient-to-br from-[#fefce8] to-[#fef08a]/30 flex flex-col items-center justify-center relative p-6 border-b border-[#e2d8c3] dark:from-[#241f19] dark:to-[#3a2f14]/40 dark:border-[#3b342c]">
+                            <!-- Visual Category Banner -->
+                            <div class="w-20 h-20 rounded-full bg-[#d97706] text-[#fcfaf2] flex items-center justify-center shadow-lg transition-transform mb-3 dark:bg-[#8a5a12] dark:text-[#f6efdf]">
+                                <i class="fa-solid fa-palette text-3xl text-amber-100"></i>
+                            </div>
+                            <span class="px-4 py-1 rounded-full bg-[#b45309] text-[#fcfaf2] font-serif font-bold text-sm tracking-wide shadow-xs dark:bg-[#8a5a12] dark:text-[#f6efdf]">
+                                PICTURE BOOKS
+                            </span>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-2xl font-bold font-serif text-[#b45309] mb-2 dark:text-[#e7b04a]">Picture Books</h3>
+                                <p class="text-sm font-semibold uppercase tracking-wider text-[#064e3b] mb-3 dark:text-[#e7b04a]">Illustrated Stories</p>
+                                <p class="text-[#57534e] text-sm leading-relaxed mb-4 dark:text-[#b0a48f]">
+                                    Poignant picture books including <em>Year of the Jungle</em>, exploring a young child's emotional experience when a parent goes to war, and <em>When Charlie McButton Lost Power</em>.
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-[#e2d8c3] flex items-center justify-between dark:border-[#3b342c]">
+                                <span class="text-xs text-[#57534e] dark:text-[#b0a48f]"><i class="fa-solid fa-book mr-1 text-[#d97706] dark:text-[#e7b04a]"></i> Illustrated Titles</span>
+                                <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="text-[#064e3b] hover:text-[#022c22] text-sm font-semibold flex items-center gap-1 group/btn dark:text-[#e7b04a] dark:hover:text-[#f4ca72]">
+                                    View Books <i class="fa-solid fa-arrow-up-right-from-square text-xs group-hover/btn:translate-x-0.5 transition-transform"></i>
+                                </a>
+                    </div>
+                    </article>
+
+                </div>
+
+                <div class="mt-14 text-center">
+                    <a href="collections.html" class="transition-link inline-flex items-center gap-2 rounded-full bg-[#064e3b] px-7 py-3 text-sm font-semibold text-[#fcfaf2] shadow-sm transition-colors hover:bg-[#022c22] hover:shadow-md group dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">
+                        <i class="fa-solid fa-timeline text-[#e7b04a]"></i>
+                        <span>View the Complete Library &amp; Timeline</span>
+                        <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION PREVIEW -->
+        <section id="about" class="py-20 bg-[#f4ede0] border-t border-[#e2d8c3] dark:bg-[#191613] dark:border-[#3b342c]">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white border border-[#e2d8c3] rounded-3xl p-8 sm:p-12 shadow-sm dark:bg-[#211d19] dark:border-[#3b342c]">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                        <div class="flex flex-col items-center text-center md:items-start md:text-left">
+                            <div class="w-36 h-44 rounded-2xl overflow-hidden border-2 border-[#064e3b]/30 shadow-md bg-white p-1 dark:border-[#b02a2a]/40 dark:bg-[#211d19]">
+                                <img src="assets/image/suzanne-collins.jpg" alt="Suzanne Collins" class="w-full h-full object-cover object-top rounded-xl">
+                            </div>
+                            <h3 class="mt-4 text-2xl font-serif font-bold text-[#292524] dark:text-[#ece2cf]">Suzanne Collins</h3>
+                            <p class="text-[#b45309] text-sm font-semibold dark:text-[#e7b04a]">American Novelist &amp; Screenwriter</p>
+                        </div>
+                        <div class="md:col-span-2 space-y-4 text-[#57534e] text-sm sm:text-base leading-relaxed dark:text-[#b0a48f]">
+                            <p>
+                                Suzanne Collins began her writing career in 1991 as a writer for children's television before publishing the acclaimed <em>Underland Chronicles</em> and the world-renowned <em>The Hunger Games</em> series.
+                            </p>
+                            <p>
+                                Drawing inspiration from classical mythology, Roman gladiatorial games, and contemporary war reportage, her novels challenge readers to examine the ethical consequences of violence, power, and media spectacle.
+                            </p>
+                            <!-- Dedicated biography transition button -->
+                            <div class="pt-4 border-t border-[#e2d8c3]/80 dark:border-[#3b342c]/80">
+                                <a href="biography.html" class="transition-link inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#064e3b] text-[#fcfaf2] hover:bg-[#022c22] font-semibold text-sm transition-colors shadow-sm group dark:bg-[#b02a2a] dark:text-[#f6efdf] dark:hover:bg-[#8c1f22]">
+                                    <span>Read Full Biography: From Beginnings to Finale</span>
+                                    <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                                </a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="site-footer" class="bg-[#fcfaf2] border-t border-[#e2d8c3] pt-16 pb-12 dark:bg-[#12100e] dark:border-[#3b342c]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-[#e2d8c3] dark:border-[#3b342c]">
+                <div class="text-center md:text-left">
+                    <span class="font-serif tracking-widest text-lg font-bold uppercase text-[#292524] dark:text-[#ece2cf]">
+                        Suzanne Collins
+                    </span>
+                    <p class="text-[#57534e] text-xs sm:text-sm mt-1 dark:text-[#b0a48f]">Literary works and chronicles.</p>
+                </div>
+
+                <!-- Social Media / Literary Links with Speech Bubble Tooltips -->
+                <div class="flex items-center justify-center gap-3">
+                    <!-- X -->
+                    
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="X">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                    <!-- Instagram -->
+                    
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram text-base"></i>
+                        </a>
+                    <!-- Goodreads -->
+                    
+                        <a href="https://goodreads.com" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Goodreads">
+                            <i class="fa-brands fa-goodreads-g text-base"></i>
+                        </a>
+                    <!-- Official Website -->
+                    
+                        <a href="https://www.suzannecollinsbooks.com" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full bg-white border border-[#e2d8c3] flex items-center justify-center text-[#57534e] hover:text-[#7c2d12] hover:border-[#7c2d12] shadow-xs transition-colors dark:bg-[#211d19] dark:border-[#3b342c] dark:text-[#b0a48f] dark:hover:text-[#f08a8a] dark:hover:border-[#f08a8a]" aria-label="Official Website">
+                            <i class="fa-solid fa-globe text-base"></i>
+                        </a>
+                    </div>
+            </div>
+
+            <!-- Copyright Notice -->
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#57534e] gap-4 dark:text-[#b0a48f]">
+                <p>&copy; 2026 Suzanne Collins. All rights reserved. Original reference: <a href="https://www.suzannecollinsbooks.com" class="text-[#7c2d12] hover:underline font-medium dark:text-[#f08a8a]">suzannecollinsbooks.com</a>.</p>
+                <p>Designed with Semantic HTML5 &amp; Tailwind CSS.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive script for mobile navbar toggle & smooth page transitions -->
+        <script>
+        /* ── Dark / Light mode ────────────────────────────────────────── */
+        const html = document.documentElement;
+        const themeButtons = document.querySelectorAll('.theme-toggle');
+
+        function applyTheme(dark) {
+            html.classList.toggle('dark', dark);
+            html.style.colorScheme = dark ? 'dark' : 'light';
+            themeButtons.forEach((btn) => {
+                btn.innerHTML = dark
+                    ? '<i class="fa-solid fa-sun text-sm"></i>'
+                    : '<i class="fa-solid fa-moon text-sm"></i>';
+                btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+                btn.setAttribute('title', dark ? 'Switch to light mode' : 'Switch to dark mode');
+            });
+        }
+
+        const stored = localStorage.getItem('sc-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(stored ? stored === 'dark' : prefersDark);
+
+        themeButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const isDark = !html.classList.contains('dark');
+                applyTheme(isDark);
+                localStorage.setItem('sc-theme', isDark ? 'dark' : 'light');
+            });
+        });
+
+        // Keep the theme in sync if it is changed in another tab
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'sc-theme') applyTheme(e.newValue === 'dark');
+        });
+
+        /* ── Mobile menu toggle ───────────────────────────────────────── */
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                var isHidden = mobileMenu.classList.toggle('hidden'); menuBtn.setAttribute('aria-expanded', String(!isHidden));
+            });
+        }
+
+        // Smooth slide transition handler for page links
+        document.querySelectorAll('a.transition-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#')) return;
+
+                e.preventDefault();
+                document.body.classList.add('page-slide-out-right');
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 260);
+            });
+        });
+    </script>
+</body>
+</html>
